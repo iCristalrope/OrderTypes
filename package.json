@@ -1,0 +1,20 @@
+{
+  "name": "ordertypes",
+  "version": "1.0.0",
+  "description": "interactive point set order type visualisation",
+  "main": "app.js",
+  "dependencies": {
+    "async": "^3.2.0",
+    "jszip":"^3.5.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": ".git"
+  },
+  "author": "Olivier De Canniere & Madalin Ionescu",
+  "license": "UNLICENSED"
+}
