@@ -40,7 +40,7 @@ const server = http.createServer((req, res) => {
     console.log(e);
   } finally {
     nb_reqs += 1;
-    console.log(`end of request: ${nb_reqs}`);
+    console.log(`end of request ${nb_reqs}. url: ${req.url}`);
   }
 });
 
