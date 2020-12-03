@@ -50,8 +50,7 @@
         <p>Ok, as expected, this is still a bit obscure, but it will all make sense soon!</p>
         <p>Let's start with the easy part: the point set. This really is what it sounds like; a collection of points.
           Consider, for example, the following point set S of 6 points in the plane.</p>
-        <iframe src="https://www.desmos.com/calculator/jzmluyc6lb?embed" width="500px" height="500px"
-          style="border: 1px solid #ccc" frameborder=0></iframe>
+        <iframe src="https://www.desmos.com/calculator/jzmluyc6lb?embed" width="500px" height="500px"style="border: 1px solid #ccc;" frameborder=0></iframe>
 
         <br><br>
         <p>The following concept is that of general position. This is a property that can apply to points or to lines.
@@ -62,36 +61,53 @@
         </ul>
         </p>
 
-        <p>The following construction shows a set of points that is NOT in general position. Adding p7 to S broke the property as it is now possible to draw a line through p3, p7 and p2.</p>
-        <iframe src="https://www.desmos.com/calculator/hlrbx7zhzw?embed" width="500px" height="500px" style="border: 1px solid #ccc" frameborder=0></iframe>
-      
+        <p>The following construction shows a set of points that is NOT in general position. Adding p7 to S broke the
+          property as it is now possible to draw a line through p3, p7 and p2.</p>
+        <iframe src="https://www.desmos.com/calculator/hlrbx7zhzw?embed" width="500px" height="500px"
+          style="border: 1px solid #ccc" frameborder=0></iframe>
+
         <br><br>
         <p>Now, let's skip ahead a bit and talk about the orientation of a triple of points.</p>
-        <p>The orientation of an ordered triple of points expresses how the third point is positioned relative to the first two. Three points p1, p2, p3 can only be in three different orientations: clockwise, counter-clockwise or alligned. The following figure shows the three options.</p>
-        <iframe src="https://www.desmos.com/calculator/9g1octzxb1?embed" width="500px" height="500px" style="border: 1px solid #ccc" frameborder=0></iframe>
+        <p>The orientation of an ordered triple of points expresses how the third point is positioned relative to the
+          first two. Three points p1, p2, p3 can only be in three different orientations: clockwise, counter-clockwise
+          or alligned. The following figure shows the three options.</p>
+        <iframe src="https://www.desmos.com/calculator/9g1octzxb1?embed" width="500px" height="500px"
+          style="border: 1px solid #ccc" frameborder=0></iframe>
         <ul>
-          <li>In red: p3 lies on the left of p1p2 and p1,p2,p3 form a left turn (Counter-clockwise rotation)</li>
+          <li>In red: p3 lies on the left of p1p2 and p1,p2,p3 form a left turn (counter-clockwise rotation)</li>
           <li>In purle: p3 is on p1p2 and p1, p2, p3 form a straight line (alligned)</li>
           <li>In blue: p3 lies on the right of p1p2 and p1, p2, p3 form a right turn (clockwise rotation)</li>
         </ul>
-        <p>The orientation of three points can be computed by the following matrix called Orientation Determinant. When the value of the determinant d is d&lt;0, d=0, d&gt;0 the three points form a counter-clockwise, no, clockwise rotation.</p>
+        <p>The orientation of three points can be computed by the following matrix called Orientation Determinant. When
+          the value of the determinant d is d&lt;0, d=0, d&gt;0 the three points form a counter-clockwise, no, clockwise
+          rotation.</p>
         <img src="images/tutorial/odmatrix.png">
 
         <br><br>
         <p>Good, now we're ready to tackle the main part of the definition. </p>
-        <p>The somewhat compicated formulation boils down to this: For each triple of points in the set keep their orientation.</p>
-        <p>A more intuitive definition is a question: "In what way are the points of this set arranged relative to each other?". For example, all sets of four points fall into two order types. One point set is drawn below for each.</p>
-        <iframe src="https://www.desmos.com/calculator/r1m991eldi?embed" width="500px" height="500px" style="border: 1px solid #ccc" frameborder=0></iframe>
-        <p>Either the points are in the arangement "triangle containing a point" or "no triangle contains another point". There is no other option for size four.</p>
-        
-        <p>This information can be used to compare different sets of points. Two sets with the same orde type for example will have the same number of triangulations.</p>
+        <p>The somewhat compicated formulation boils down to this: For each triple of points in the set keep their
+          orientation.</p>
+        <p>A more intuitive definition is a question: "In what way are the points of this set arranged relative to each
+          other?". For example, all sets of four points fall into two order types. One point set is drawn below for
+          each.</p>
+        <iframe src="https://www.desmos.com/calculator/r1m991eldi?embed" width="500px" height="500px"
+          style="border: 1px solid #ccc" frameborder=0></iframe>
+        <p>Either the points are in the arangement "triangle containing a point" or "no triangle contains another
+          point". There is no other option for size four.</p>
+
+        <p>This information can be used to compare different sets of points. Two sets with the same orde type for
+          example will have the same number of triangulations.</p>
+
 
         <h1>Tutorial - Order Type Encoding</h1>
-        <p>Now that we understand what an order type is we need to know how to work with them. And for that we need to know how to encode an order type.</p>
+        <p>Now that we understand what an order type is we need to know how to work with them. But, how do we compute the order type of a point set to learn about its properties and compare them to that of another set. We need a way to encode Order Types.</p>
+        <p>As the number of Order Types increases exponentially with the size of the set of points, effiency is required.</p>
+        <p>Multiple encodings exist:</p>
         <ul>
-          <li>Point list ...</li>
+          <li>A litteral approach would be to store for each triple of points their orientation. This is very space-inefficient.</li>
+          <li>Instead of storing the orientation of triples, we could store the points themselves and recompute the triples when necessary. This compact but query times will suffer greatly</li>
           <li>Wiring diagram</li>
-          <li>Lambda Matrix</li>
+          <li>Lambda Matrix: This clever solution allows for a quadratic cost of storage and can be compared directly with other matrices.</li>
         </ul>
         <br>
       </div>

@@ -40,7 +40,10 @@ const server = http.createServer((req, res) => {
     console.log(e);
   } finally {
     nb_reqs += 1;
-    console.log(`end of request ${nb_reqs}. url: ${req.url}`);
+    let timeStamp = new Date().toISOString();
+    const forwarded = req.headers['x-forwarded-for']
+    const ip = forwarded ? forwarded.split(/, /)[0] : req.connection.remoteAddress
+    console.log(`[${timeStamp} | ${ip}] end of request ${nb_reqs}. url: ${req.url}`);
   }
 });
 

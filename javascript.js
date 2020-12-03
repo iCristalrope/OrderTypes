@@ -34,7 +34,7 @@ async function getBlobs() {
 ////////////////////
 
 class Point {
-    constructor(x, y, range = 256, color = "black") {
+    constructor(x, y, range = 256, color = "grey") {
         this.x = Math.round(x);
         this.y = Math.round(y);
         this.color = color;
@@ -57,6 +57,28 @@ class Point {
 //TODO debug
 function test() {
     let buff = new Uint8Array(ot_data["otypes05_b08"]);
+
+
+    pointSets = [];
+    let nbSets = 3;
+    let nbPoints = 5;
+    let index = 0;
+    for (let set = 0; set < nbSets; set++) {
+        let points = [];
+        for (let point = 0; point < nbPoints; point++) {
+            let x = buff[index++];
+            let y = buff[index++];
+            points.push(new Point(x, y));
+        }
+        pointSets.push(points);
+    };
+
+    console.log(lambdaMatrixString(pointSets[0]));
+    console.log(lambdaMatrixString(pointSets[1]));
+    console.log(lambdaMatrixString(pointSets[2]));
+
+    console.log(buff);
+    return "end of functioin test";
 
     console.log(buff[0]);
     console.log(buff[1]);
@@ -89,30 +111,31 @@ function test() {
     console.log(buff[28]);
     console.log(buff[29]);
 
-
-    pointSets = [];
-    let nbSets = 3;
-    let nbPoints = 5;
-    let index = 0;
-    for (let set = 0; set < nbSets; set++) {
-        let points = [];
-        for (let point = 0; point < nbPoints; point++) {
-            let x = buff[index++];
-            let y = buff[index++];
-            points.push(new Point(x, y));
+    /*
+        pointSets = [];
+        let nbSets = 3;
+        let nbPoints = 5;
+        let index = 0;
+        for (let set = 0; set < nbSets; set++) {
+            let points = [];
+            for (let point = 0; point < nbPoints; point++) {
+                let x = buff[index++];
+                let y = buff[index++];
+                points.push(new Point(x, y));
+            }
+            pointSets.push(points);
+        };
+        for (let i in pointSets[1]) {
+            console.log(pointSets[1][i]);
         }
-        pointSets.push(points);
-    };
-    for (let i in pointSets[1]) {
-        console.log(pointSets[1][i]);
-    }
-
-    let lambda1 = lambdaMatrixString(pointSets[2]);
-    let set1bis = _readPointSet(buff, 2, nbPoints);
-    let lambda1bis = lambdaMatrixString(set1bis);
-    console.log("llllll", lambda1, lambda1bis);
-    console.log("set1", pointSets[2]);
-    console.log("set1bis", set1bis);
+    
+        let lambda1 = lambdaMatrixString(pointSets[2]);
+        let set1bis = readPointSet(buff, 2, nbPoints);
+        let lambda1bis = lambdaMatrixString(set1bis);
+        console.log("llllll", lambda1, lambda1bis);
+        console.log("set1", pointSets[2]);
+        console.log("set1bis", set1bis);
+        */
 }
 
 /**
@@ -216,17 +239,18 @@ function binSearchOt(nbPoints, lambdaMatrixString) {
         return undefined;
     }
 
+
     let entrySize = nbPoints * 2;
     return _recBinSearchOt(arr, 0, arr.length / entrySize - 1, nbPoints, lambdaMatrixString);
 }
 
 /**
  * Recursive helper function for a binary search on order types
+ * lo and hi are entry offsets
  */
 function _recBinSearchOt(arr, lo, hi, nbPoints, lambdaMatrixStr) {
     let midPoint = Math.floor((lo + hi) / 2);
-    let entrySize = nbPoints * 2;
-    let pointSet = _readPointSet(arr, midPoint * entrySize, nbPoints);
+    let pointSet = readPointSet(arr, midPoint, nbPoints);
     let lmatrix = lambdaMatrixString(pointSet);
     let res = lmatrix.localeCompare(lambdaMatrixStr);
 
@@ -241,13 +265,19 @@ function _recBinSearchOt(arr, lo, hi, nbPoints, lambdaMatrixStr) {
     if (res === 0) {
         return pointSet;
     } else if (res < 0) {
-        return _recBinSearchOt(arr, lo, midPoint, nbPoints, lambdaMatrixStr);
+        return _recBinSearchOt(arr, midPoint + 1, hi, nbPoints, lambdaMatrixStr);
     } else {
-        return _recBinSearchOt(arr, midPoint, hi, nbPoints, lambdaMatrixStr);
+        return _recBinSearchOt(arr, lo, midPoint - 1, nbPoints, lambdaMatrixStr);
     }
 }
 
-function _readPointSet(arr, offset, nbPoints) {
+/**
+ * //TODO
+ * @param {*} arr  
+ * @param {*} offset 
+ * @param {*} nbPoints 
+ */
+function readPointSet(arr, offset, nbPoints) {
     let points = [];
     let nbBytes = nbPoints < 9 ? 1 : 2;
     let entrySize = nbPoints * 2;
