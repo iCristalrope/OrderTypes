@@ -1,5 +1,6 @@
 window.onload = function () {
     getBlobs();
+    console.log($("p")[0]);
 }
 
 var ot_data = {};
