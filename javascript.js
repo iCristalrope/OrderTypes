@@ -1,6 +1,5 @@
 window.onload = function () {
     getBlobs();
-    console.log($("p")[0]);
 }
 
 var ot_data = {};
@@ -73,9 +72,9 @@ function test() {
         pointSets.push(points);
     };
 
-    console.log(lambdaMatrixString(pointSets[0]));
-    console.log(lambdaMatrixString(pointSets[1]));
-    console.log(lambdaMatrixString(pointSets[2]));
+    console.log(minLambdaMatrixString(pointSets[0]));
+    console.log(minLambdaMatrixString(pointSets[1]));
+    console.log(minLambdaMatrixString(pointSets[2]));
 
     console.log(buff);
     return "end of functioin test";
@@ -110,32 +109,6 @@ function test() {
     console.log(buff[27]);
     console.log(buff[28]);
     console.log(buff[29]);
-
-    /*
-        pointSets = [];
-        let nbSets = 3;
-        let nbPoints = 5;
-        let index = 0;
-        for (let set = 0; set < nbSets; set++) {
-            let points = [];
-            for (let point = 0; point < nbPoints; point++) {
-                let x = buff[index++];
-                let y = buff[index++];
-                points.push(new Point(x, y));
-            }
-            pointSets.push(points);
-        };
-        for (let i in pointSets[1]) {
-            console.log(pointSets[1][i]);
-        }
-    
-        let lambda1 = lambdaMatrixString(pointSets[2]);
-        let set1bis = readPointSet(buff, 2, nbPoints);
-        let lambda1bis = lambdaMatrixString(set1bis);
-        console.log("llllll", lambda1, lambda1bis);
-        console.log("set1", pointSets[2]);
-        console.log("set1bis", set1bis);
-        */
 }
 
 /**
@@ -143,29 +116,97 @@ function test() {
  * //TODO: if n is large format breaks (more than one digit required per entry)  
  * @param {Point[]} pointSet 
  */
-function lambdaMatrixString(pointSet) {
+function minLambdaMatrixString(pointSet) {
     let indices = [];
     for (let i = 0; i < pointSet.length; i++) {
         indices.push(i);
     }
 
-    let ots = [];
-    let perms = genPerms(indices);
-
-    for (let i in perms) {
-        let perm = perms[i];
-        let str = "";
-        for (let row = 0; row < perm.length; row++) {
-            for (let col = 0; col < perm.length; col++) {
-                str += nbPointsLeftOf(pointSet[perm[row]], pointSet[perm[col]], pointSet);
-            }
+    let arr = derefIndices(indices, pointSet);
+    let min_matrix = _lambdaMatrixStr(arr);
+    while (true) {
+        indices = nextPermutation(indices);
+        if (indices === undefined) {
+            break;
         }
-        ots.push(str);
+        arr = derefIndices(indices, pointSet);
+        let matrix = _lambdaMatrixStr(arr);
+
+        if (matrix.localeCompare(min_matrix) === -1) {
+            min_matrix = matrix;
+        }
     }
 
-    ots.sort();
-    return ots[0];
+    return min_matrix;
 }
+
+function _lambdaMatrixStr(arr) {
+    let matrix = "";
+    for (let row = 0; row < arr.length; row++) {
+        for (let col = 0; col < arr.length; col++) {
+            if (row !== col) {
+                matrix += nbPointsLeftOf(arr[row], arr[col], arr);
+            }
+        }
+    }
+    return matrix;
+}
+
+/**
+ * Function that replaces an array of indices to objects by the objects themselves
+ * @param {number[]} indices the list of indices to replace
+ * @param {[]} arr the objects
+ */
+function derefIndices(indices, arr) {
+    let out = [];
+    for (let i in indices) {
+        out.push(arr[indices[i]]);
+    }
+    return out;
+}
+
+/**
+ * https://www.youtube.com/watch?v=VVPUAUVbjfM
+ * @param {number[]} arr an array of numbers 
+ */
+function nextPermutation(arr) {
+    // find peak
+    let peak;
+    for (let i = arr.length; i >= 0; i--) {
+        if (i === 0) {
+            return undefined;
+        }
+
+        if (arr[i] > arr[i - 1]) {
+            peak = i;
+            break;
+        }
+    }
+
+    // find largest number on right of peak
+    for (let j = arr.length - 1; j >= 0; j--) {
+        if (arr[j] > arr[peak - 1]) {
+            let temp = arr[j];
+            arr[j] = arr[peak - 1];
+            arr[peak - 1] = temp;
+            break;
+        }
+    }
+
+    // reverse from peak to end of arr
+    let start = peak;
+    let end = arr.length - 1;
+    while (start < end) {
+        let temp = arr[start];
+        arr[start] = arr[end];
+        arr[end] = temp;
+        start++;
+        end--;
+    }
+    return arr;
+}
+
+
 
 /**
  * Computes the number of points different from point1 and point2 in points that are to the left of the line point1-point2
@@ -194,40 +235,12 @@ function orientationDet(a, b, c) {
 }
 
 /**
- * Generates all permutations of a set of numbers
- * @param {number[]} numbers the number 
- * @returns {number[][]} the list of permutations
- */
-function genPerms(numbers) {
-    let perms = [];
-    nextPerm(numbers, [], perms);
-    return perms;
-}
-
-/**
- * Recursive helper function for the generation of permutations
- */
-function nextPerm(indices, buff, out) {
-    if (buff.length === indices.length) {
-        out.push(buff);
-        return;
-    }
-    for (let i of indices) {
-        if (!buff.includes(i)) {
-            let buff2 = [...buff];
-            buff2.push(i);
-            nextPerm(indices, buff2, out);
-        }
-    }
-}
-
-/**
  * Binary search for the point corresponding to the order type of the given lambda matrix 
  * @param {number} nbPoints the size of the order type
- * @param {string} lambdaMatrixString the lambda matrix flattended into a string (row after row)
+ * @param {string} minLambdaMatrixString the lambda matrix flattended into a string (row after row)
  * @returns {Point[]} the point set realisation corresponding to the given lambda matrix contained in the database or undefined if it wasn't found
  */
-function binSearchOt(nbPoints, lambdaMatrixString) {
+function binSearchOt(nbPoints, minLambdaMatrixString) {
     let arr;
     if (nbPoints === 9) {
         let pts = ("0" + nbPoints).slice(-2);
@@ -241,7 +254,7 @@ function binSearchOt(nbPoints, lambdaMatrixString) {
 
 
     let entrySize = nbPoints * 2;
-    return _recBinSearchOt(arr, 0, arr.length / entrySize - 1, nbPoints, lambdaMatrixString);
+    return _recBinSearchOt(arr, 0, arr.length / entrySize - 1, nbPoints, minLambdaMatrixString);
 }
 
 /**
@@ -251,7 +264,7 @@ function binSearchOt(nbPoints, lambdaMatrixString) {
 function _recBinSearchOt(arr, lo, hi, nbPoints, lambdaMatrixStr) {
     let midPoint = Math.floor((lo + hi) / 2);
     let pointSet = readPointSet(arr, midPoint, nbPoints);
-    let lmatrix = lambdaMatrixString(pointSet);
+    let lmatrix = minLambdaMatrixString(pointSet);
     let res = lmatrix.localeCompare(lambdaMatrixStr);
 
     if (lo === hi) {

@@ -218,11 +218,7 @@ class VirtualCanvas {
     let relativeX =
       this.xMin + (point.x / (point.range - 1)) * (this.xMax - this.xMin);
     // invert the y axis direction (origin becomes the bottom left corner)
-    let relativeY =
-      this.yMin +
-      (this.yMax -
-        this.yMin -
-        (point.y / (point.range - 1)) * (this.yMax - this.yMin));
+    let relativeY = this.yMin + (this.yMax - this.yMin - (point.y / (point.range - 1)) * (this.yMax - this.yMin));
 
     fill(point.color);
     stroke(point.color);
@@ -388,15 +384,15 @@ function setup() {
       canvasL,
       canvasL
     );
-    select("#dataOpt").size(b.xMax - a.xMin, canvasL / 2);
+    //select("#dataOpt").size(b.xMax - a.xMin, canvasL / 2);
+    select("#dataOpt").style("margin: 10px; padding: 5px;");
     select("#dispOpts")
-      .size(windowWidth - 0.1 * windowWidth, canvasL)
+      .size(500, 500)
       .style("padding: " + 0.05 * windowWidth + "px;");
-    select("#dispOptA").size(canvasL, canvasL).style("float: left;");
+    select("#dispOptA").size(500, 500).style("float: left;");
     select("#dispOptB")
-      .size(canvasL, canvasL)
+      .size(500, 500)
       .style("float: right;")
-      .position(b.xMin, AUTO);
     //select("#defaultCanvas0.p5Canvas").parent("dispOpts");
   } else {
     // portrait orientation
@@ -509,18 +505,18 @@ function setup() {
   }
 
   select("#pvw").mousePressed(preview);
-
-  select("#equiv").mousePressed(() => {
-    let points = a.points;
-    let lambdaMatrixStr = lambdaMatrixString(points);
-    let equivPoints = binSearchOt(points.length, lambdaMatrixStr);
-    console.log("jjjjjjjj", equivPoints);
-    transferPoints();
-    a.points = equivPoints;
-  });
+  select("#equiv").mousePressed(handleEquivButton);
 
   button.parent(select("#canvasContainer"));
   // Put setup code here
+}
+
+function handleEquivButton() {
+  let points = a.points;
+  let lambdaMatrixStr = minLambdaMatrixString(points);
+  let equivPoints = binSearchOt(points.length, lambdaMatrixStr);
+  transferPoints();
+  a.points = equivPoints;
 }
 
 function randomColor() {
@@ -566,6 +562,14 @@ function draw() {
 function mousePressed() {
   a.addPoint(mouseX, mouseY);
   //console.log(select("#chk0").checked());
+}
+
+function keyPressed() {
+  if (key === 'c') {
+    a.clearAndErase();
+  } else if (key === 'e') {
+    handleEquivButton();
+  }
 }
 
 // This Redraws the Canvas when resized
