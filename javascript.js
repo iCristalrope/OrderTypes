@@ -140,12 +140,19 @@ function minLambdaMatrixString(pointSet) {
     return min_matrix;
 }
 
-function _lambdaMatrixStr(arr) {
+/**
+ * 
+ * @param {*} arr 
+ * @param {*} left 
+ */
+function _lambdaMatrixStr(arr, left = true) {
     let matrix = "";
     for (let row = 0; row < arr.length; row++) {
         for (let col = 0; col < arr.length; col++) {
             if (row !== col) {
-                matrix += nbPointsLeftOf(arr[row], arr[col], arr);
+                matrix += nbPointsLeftOf(arr[row], arr[col], arr, left);
+            } else {
+                matrix += "0";
             }
         }
     }
@@ -213,13 +220,18 @@ function nextPermutation(arr) {
  * @param {Point} point1 first point of the line
  * @param {Point} point2 second point of the line
  * @param {Point[]} points the set complete set of points
+ * @param {boolean} left indicated the direction of the turn with the line
  */
-function nbPointsLeftOf(point1, point2, points) {
+function nbPointsLeftOf(point1, point2, points, left) {
     let nbLeft = 0;
     for (let i in points) {
         let point = points[i];
         if (!point.equals(point1) && !point.equals(point2)) {
             if (orientationDet(point1, point2, point) < 0) {
+                if (left) {
+                    nbLeft++;
+                }
+            } else if (!left) {
                 nbLeft++;
             }
         }
@@ -264,8 +276,24 @@ function binSearchOt(nbPoints, minLambdaMatrixString) {
 function _recBinSearchOt(arr, lo, hi, nbPoints, lambdaMatrixStr) {
     let midPoint = Math.floor((lo + hi) / 2);
     let pointSet = readPointSet(arr, midPoint, nbPoints);
-    let lmatrix = minLambdaMatrixString(pointSet);
+
+
+    let ch = grahamScan(pointSet);
+    let minMatrix = _lambdaMatrixStr(pointSet, ch[0]);
+    for (let i = 1; i < ch.length; i++) {
+        let tmpMatrix = _lambdaMatrixStr(orderRadially(pointSet, ch[i]));
+        if (tmpMatrix.localeCompare(minMatrix) < 0) {
+            minMatrix = tmpMatrix;
+        }
+    }
+
+    let lmatrix = minMatrix; //TODO
+    //let lmatrix = minLambdaMatrixString(pointSet);
+    console.log("comparing: ", lmatrix, " to ", lambdaMatrixStr);
     let res = lmatrix.localeCompare(lambdaMatrixStr);
+
+    console.log("binSearch: ", _lambdaMatrixStr(pointSet), "\ne: ", lambdaMatrixStr);
+
 
     if (lo === hi) {
         if (res === 0) {

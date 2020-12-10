@@ -181,41 +181,51 @@ ul#menu li a:hover, ul#menu li.selected a, ul#menu li.selected a:hover {
 }
 
 #site_content {
+  width: 1050px;
   overflow: hidden;
   margin: 0 auto 0 auto;
+  padding: 0 24px 20px 20px;
   background: #FFF;
 }
 
-.sidebar {
-  float: right;
-  padding: 0 15px 20px 15px;
+#dispOpts{
+  margin-top: 20px; 
+  display: grid;
+  grid-template: "a b" 500px;
+  column-gap: 50px;
 }
 
-.sidebar ul {
-  width: 198px;
-  padding: 4px 0 0 0;
-  margin: 4px 0 30px 0;
+#dispOptA{
+  width: 500px;
+  border-style: solid;
+  border-width: 1px;
 }
 
-.sidebar li {
-  list-style: none;
-  padding: 0 0 7px 0;
+#dispOptB{
+  width: 500px;
+  border-style: solid;
+  border-width: 1px;
 }
 
-.sidebar li a, .sidebar li a:hover {
-  padding: 0 0 0 40px;
-  display: block;
-  background: transparent url(link.png) no-repeat left center;
+#canvas_container{
+	margin-top: 20px;
+	display: grid;
+	grid-template: "a arrow b" 500px;
+	column-gap: 2px;
 }
 
-.sidebar li a.selected {
-  color: #7E2451;
-  text-decoration: none;
+#arrow_holder{
+	width: 46px;
+}
+
+#arrow_button{
+  margin-top: 228px;
+  width: 44px;
+  height: 44px;
 }
 
 #content {
-  text-align: left;
-  float: left;
+  margin-top: 20px;
   padding: 0;
 }
 
@@ -229,27 +239,6 @@ ul#menu li a:hover, ul#menu li.selected a, ul#menu li.selected a:hover {
   margin: 0 0 6px 0;
   padding: 0 0 4px 25px;
   line-height: 1.5em;
-}
-
-#footer {
-  font: normal 100% 'lucida sans unicode', arial, sans-serif;
-  height: 33px;
-  padding: 24px 0 5px 0;
-  text-align: center;
-  background: transparent;
-  color: #FFF;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
-#footer a {
-  color: #FFF;
-  text-decoration: none;
-}
-
-#footer a:hover {
-  color: #FFF;
-  text-decoration: underline;
 }
 
 .search {
@@ -341,39 +330,4 @@ table tr td {
   background: #F0EFE2;
   color: #47433F;
   border-top: 1px solid #FFF;
-}
-
-div.grid_container {
-  padding: 5px;
-  margin: 5px;
-  display: grid;
-  height: 400px;
-  width: 800px;
-  grid-template-columns: auto auto;
-
-  grid-template-rows: auto auto;
-  grid-template-areas:  
-    "zone_a zone_b"
-    "zone_c zone_d";
-  grid-gap: 1px 1px;
-}
-
-.grid_item1{
-  border: 1px solid rgba(0, 0, 0, 0.8);
-  grid-area: zone_a;
-}
-
-.grid_item2{
-  border: 1px solid rgba(0, 0, 0, 0.8);
-  grid-area: zone_b;
-}
-
-.grid_item3{
-  border: 1px solid rgba(0, 0, 0, 0.8);
-  grid-area: zone_c;
-}
-
-.grid_item4{
-  border: 1px solid rgba(0, 0, 0, 0.8);
-  grid-area: zone_d;
 }
