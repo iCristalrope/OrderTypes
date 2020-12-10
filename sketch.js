@@ -174,36 +174,15 @@ function drawPolygon(extremes, color) {
 class ExcessivePointsError extends Error { }
 
 
-
-var sketch1 = function(p) {
+var sketch = function (p) {
   p.x = 100;
   p.y = 100;
   p.canvas;
-  p.setup = function() {
+  p.setup = function () {
     p.canvas = p.createCanvas(500, 500);
-	p.canvas.parent('canvas-holder1');
     p.background(51);
   };
-  p.draw = function() {
-    p.fill(255, 0, 200, 25);
-    p.noStroke();
-    p.ellipse(p.x, p.y, 48, 48);
-
-    p.x = p.x + p.random(-10, 10);
-    p.y = p.y + p.random(-10, 10);
-  };
-};
-
-var sketch2 = function(p) {
-  p.x = 100;
-  p.y = 100;
-  p.canvas;
-  p.setup = function() {
-    p.canvas = p.createCanvas(500, 500);
-	p.canvas.parent('canvas-holder2');
-    p.background(51);
-  };
-  p.draw = function() {
+  p.draw = function () {
     p.fill(255, 200, 0, 25);
     p.noStroke();
     p.ellipse(p.x, p.y, 48, 48);
@@ -214,13 +193,8 @@ var sketch2 = function(p) {
 };
 
 
-
-//////////////////
-//////////////////
-//////////////////
-
-var canvasA = new p5(sketch1);
-var canvasB = new p5(sketch2);
+var canvasA = new p5(sketch, "canvas-holder1");
+var canvasB = new p5(sketch, "canvas-holder2");
 
 function resetBackground() {
   canvasA.x = canvasA.width / 2;
