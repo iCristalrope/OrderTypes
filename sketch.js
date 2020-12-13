@@ -396,11 +396,12 @@ function clickOnNext() {
 }
 
 function clickOnEquivalent() {
-  let points = canvasA.contents.points;
+  if (canvasA.contents.points[0].length < 3) return;
+  let points = canvasA.contents.points[0];
   let lambdaMatrixStr = minLambdaMatrixString(points);
   let equivPoints = binSearchOt(points.length, lambdaMatrixStr);
   clickOnTransferPts();
-  canvasA.contents.points = equivPoints;
+  canvasA.contents.points.push(equivPoints);
   if (canvasA.contents.drawCH) canvasA.contents.computeCH();
 
   canvasA.redraw();
@@ -420,7 +421,7 @@ function clickOnPreview() {
     arr = new Uint16Array(ot_data[`otypes${pts}_b16`]);
   }
   let pointSet = readPointSet(arr, id, nb);
-  canvasA.contents.points = pointSet;
+  canvasA.contents.points.push(pointSet);
   if (canvasA.contents.drawCH) canvasA.contents.computeCH();
 
   canvasA.redraw();
