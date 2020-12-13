@@ -425,6 +425,11 @@ function clickOnPreview() {
     arr = new Uint16Array(ot_data[`otypes${pts}_b16`]);
   }
   let pointSet = readPointSet(arr, id, nb);
+  for (let point of pointSet){
+    point.x /= point.range;
+    point.y /= point.range;
+  }
+  console.log(pointSet);
   canvasA.contents.points.push(pointSet);
   if (canvasA.contents.drawCH) canvasA.contents.computeCH();
 

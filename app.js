@@ -15,9 +15,9 @@ const server = http.createServer((req, res) => {
         res.setHeader("Content-Type", "text/html");
         const ot_data = fs.readFileSync("index.html");
         res.write(ot_data);
-	resCode = 200;
+	      resCode = 200;
       } else {
-	resCode = 200;
+	      resCode = 200;
         if (req.url.endsWith(".html")) {
           res.setHeader("Content-Type", "text/html");
         } else if (req.url.endsWith(".js")) {
