@@ -427,6 +427,11 @@ function clickOnPreview() {
   canvasA.redraw();
 }
 
+function afterLoading(){
+  connectButtons();
+  getBlobs();
+}
+
 function connectButtons() {
   document.getElementById("canvas-holder1").onclick = clickOnCanvasA;
   document.getElementById("canvas-holder2").onclick = clickOnCanvasB;

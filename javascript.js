@@ -1,7 +1,3 @@
-window.onload = function () {
-    getBlobs();
-}
-
 var ot_data = {};
 var data_ot9_ready = false;
 
@@ -131,6 +127,7 @@ function test() {
  * //TODO: if n is large format breaks (more than one digit required per entry)  
  * @param {Point[]} pointSet 
  */
+/*
 function minLambdaMatrixString(pointSet) {
     let indices = [];
     for (let i = 0; i < pointSet.length; i++) {
@@ -153,6 +150,33 @@ function minLambdaMatrixString(pointSet) {
     }
 
     return min_matrix;
+}
+*/
+
+function minLambdaMatrixString(pointSet) {
+    let CH = grahamScan(pointSet);
+    let minMatrix = undefined;
+
+    // try each point on CH as pivot
+    for (let pivotId in CH) {
+        let tmpMatrix = "";
+        let pivotPoint = CH[pivotId];
+        let ordered = orderRadially(pointSet, pivotPoint);
+        let reversed = [ordered[0]].concat(ordered.slice(1).reverse());
+        
+        for (let i in reversed) {
+            for (let j in reversed) {
+                tmpMatrix += nbPointsLeftOf(reversed[i], reversed[j], reversed);
+            }
+        }
+
+        console.log(tmpMatrix);
+        if (minMatrix === undefined || tmpMatrix.localeCompare(minMatrix) < 0){
+            minMatrix = tmpMatrix;
+        }
+    }
+
+    return minMatrix;
 }
 
 /**
@@ -237,12 +261,12 @@ function nextPermutation(arr) {
  * @param {Point[]} points the set complete set of points
  * @param {boolean} left indicated the direction of the turn with the line
  */
-function nbPointsLeftOf(point1, point2, points, left) {
+function nbPointsLeftOf(point1, point2, points, left=true) {
     let nbLeft = 0;
     for (let i in points) {
         let point = points[i];
         if (!point.equals(point1) && !point.equals(point2)) {
-            if (orientationDet(point1, point2, point) < 0) {
+            if (orientationDet(point1, point2, point) > 0) {
                 if (left) {
                     nbLeft++;
                 }
