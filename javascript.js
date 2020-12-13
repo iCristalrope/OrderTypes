@@ -33,11 +33,26 @@ async function getBlobs() {
 ////////////////////
 
 class Point {
-    constructor(x, y, range = 256, color = "grey") {
-        this.x = Math.round(x);
-        this.y = Math.round(y);
-        this.color = color;
+    constructor() {
+        let x, y, range=255, color = "#888888";
+        switch (arguments.length) {
+            case 1:
+                x = arguments[0].x;
+                y = arguments[0].y;
+                break;
+            case 4:
+                color = arguments[3];
+            case 3:
+                range = arguments[2];
+            case 2:
+                x = arguments[0];
+                y = arguments[1];
+                break;
+        }
+        this.x = x;
+        this.y = y;
         this.range = range;
+        this.color = color;
     }
 
     setRange(range) {

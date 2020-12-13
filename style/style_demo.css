@@ -197,13 +197,13 @@ ul#menu li a:hover, ul#menu li.selected a, ul#menu li.selected a:hover {
 
 #dispOptA{
   width: 500px;
-  border-style: solid;
+  border-style: none;
   border-width: 1px;
 }
 
 #dispOptB{
   width: 500px;
-  border-style: solid;
+  border-style: none;
   border-width: 1px;
 }
 
