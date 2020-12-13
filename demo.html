@@ -13,7 +13,7 @@
   <script src="sketch.js"></script>
 </head>
 
-<body>
+<body onload="connectButtons()">
   <div id="main">
     <div id="header">
       <div id="menubar">
@@ -51,18 +51,20 @@
         <div id="dispOpts">
 		
           <div id="dispOptA">
-            <input type="button" value="Magnify" id="magni" />
-            <input type="button" value="Clear canvas" id="clr" /><br />
+            <input type="button" value="Magnify" id="magni"/>
+            <input type="button" value="Clear canvas" id="clr"/><br />
 
-            <input type="checkbox" id="showchA" />
+            <input type="checkbox" id="showchA"/>
             <label for="showchA"> Show Convex Hull</label><br />
 
-            <input type="checkbox" id="showAcomp" />
-            <label for="showAcomp"> Show fully connected graph</label><br />
+            <input type="checkbox" id="showcgA"/>
+            <label for="showcgA"> Show fully connected graph</label><br />
           </div>
           <div id="dispOptB">
-            <input type="checkbox" id="showchB" />
+            <input type="checkbox" id="showchB"/>
             <label for="showchB"> Show Convex Hull(s)</label><br />
+            <input type="checkbox" id="showcgB"/>
+            <label for="showcgB"> Show fully connected graph(s)</label><br />
             <dl id="checkboxes">
               <dt>Point set visibility:</dt>
               <dd>
