@@ -16,7 +16,7 @@ function range(n) {
 
 function orientationDet(a, b, c) {
   /*
-  Basic orientation determinant function 
+  Basic orientation determinant function
   */
   return (b.x - a.x) * (c.y - b.y) - (b.y - a.y) * (c.x - b.x);
 }
@@ -24,7 +24,7 @@ function orientationDet(a, b, c) {
 function leqComparatorOrientDet(base) {
   /*
   Orientation determinant as comparison operator:
-  base is the leftmost point, This function returns 
+  base is the leftmost point, This function returns
   a boolean valued function taking 2 parameters, which
   in term returns true if the 2 parameters are radially
   ordered around the base point.
@@ -80,7 +80,7 @@ function merge(left, right) {
 
 function orderRadially(points, center = null) {
   /*
-  Returns the ordered list of point with respect to the leftmost 
+  Returns the ordered list of point with respect to the leftmost
   point.
   */
   let lfPoint;
@@ -263,10 +263,14 @@ class CanvasContents {
   }
 
   deleteSubset(i) {
-    if (i !== this.points.length - 1)
-      for (let j = i + 1; j < this.points.length; j++)
+    if (i !== this.points.length - 1) {
+      for (let j = i + 1; j < this.points.length; j++) {
         this.points[j - 1] = this.points[j];
+        this.ch[j - 1] = this.ch[j];
+      }
+    }
     this.points.pop();
+    this.ch.pop();
   }
 }
 
@@ -336,6 +340,7 @@ function transferPoints() {
   canvasB.contents.points.push(canvasA.contents.points[0]);
   if (canvasB.contents.ch.length !== 0) canvasB.contents.ch.push(grahamScan(canvasA.contents.points[0]));
   canvasA.contents.reset();
+  document.getElementById("visib").style.display = "block";
 }
 
 function clickOnTransferPts() {
@@ -353,6 +358,8 @@ function clickOnTransferPts() {
 
 function clickOnDeleteSubset(i) {
   canvasB.contents.deleteSubset(i);
+
+  if (canvasB.contents.points.length === 0) document.getElementById("visib").style.display = "none";
 
   for (let i = 0; i < canvasB.contents.points.length; i++) {
     document.getElementById("col" + i).value = canvasB.contents.points[i][0].color;
@@ -434,6 +441,8 @@ function connectButtons() {
   document.getElementById("next").onclick = clickOnNext;
   document.getElementById("equiv").onclick = clickOnEquivalent;
   document.getElementById("pvw").onclick = clickOnPreview;
+
+  document.getElementById("visib").style.display = "none";
 
   for (let i = 0; i < 10; i++) {
     document.getElementById("set" + i).style.display = "none";
