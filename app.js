@@ -15,8 +15,9 @@ const server = http.createServer((req, res) => {
         res.setHeader("Content-Type", "text/html");
         const ot_data = fs.readFileSync("index.html");
         res.write(ot_data);
-
+	resCode = 200;
       } else {
+	resCode = 200;
         if (req.url.endsWith(".html")) {
           res.setHeader("Content-Type", "text/html");
         } else if (req.url.endsWith(".js")) {
@@ -24,15 +25,21 @@ const server = http.createServer((req, res) => {
         } else if (req.url.endsWith(".css")) {
           res.setHeader("Content-Type", "text/css");
         } else if (req.url.endsWith(".ico")) {
-          // nothing
-        }else {
+          resCode = 404;
+        } else {
           res.setHeader("Content-Type", "application/octet-stream");
         }
 
-        const ot_data = fs.readFileSync(req.url.substring(1));
-        res.write(ot_data);
+	if (resCode === 200) {
+          try{
+	    const ot_data = fs.readFileSync(req.url.substring(1));
+            res.write(ot_data);
+	  } catch(e) {
+	    console.log("Handled error: ", e.message);
+	    resCode = 404;
+	  }
+	}
       }
-      resCode = 200;
     }
     res.statusCode = resCode;
     res.end();

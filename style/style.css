@@ -80,7 +80,7 @@ blockquote {
 }
 
 ul {
-  margin: 2px 0 22px 17px;
+  margin: 2px 0 0px 17px;
 }
 
 ul li {
@@ -188,43 +188,14 @@ ul#menu li a:hover, ul#menu li.selected a, ul#menu li.selected a:hover {
   background: #FFF;
 }
 
-.sidebar {
-  float: right;
-  width: 210px;
-  padding: 0 15px 20px 15px;
-}
-
-.sidebar ul {
-  width: 198px;
-  padding: 4px 0 0 0;
-  margin: 4px 0 30px 0;
-}
-
-.sidebar li {
-  list-style: none;
-  padding: 0 0 7px 0;
-}
-
-.sidebar li a, .sidebar li a:hover {
-  padding: 0 0 0 40px;
-  display: block;
-  background: transparent url(link.png) no-repeat left center;
-}
-
-.sidebar li a.selected {
-  color: #7E2451;
-  text-decoration: none;
-}
-
 #content {
   text-align: left;
   float: left;
-  width: 595px;
   padding: 0;
 }
 
 #content ul {
-  margin: 2px 0 22px 0px;
+  margin: 2px 0 16px 0px;
 }
 
 #content ul li {
@@ -346,4 +317,8 @@ table tr td {
   background: #F0EFE2;
   color: #47433F;
   border-top: 1px solid #FFF;
+}
+
+.bold_title{
+  font-weight: bold;
 }

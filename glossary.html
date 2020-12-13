@@ -19,51 +19,57 @@
           <li><a href="/index.html">Tutorial</a></li>
           <li class="selected"><a href="/glossary.html">Glossary</a></li>
           <li><a href="/demo.html">Interactive Demo</a></li>
-          <li><a href="/another_page.html">Another Page</a></li>
-          <li><a href="/contact.html">Contact Us</a></li>
         </ul>
       </div>
     </div>
     <div id="site_content">
       <div id="content">
-        <h1>Glossary</h1>
+        <h1 class="bold_title">Glossary</h1>
         <p>This page provides a list of words or concepts related to the topic of order types or Computational Geometry in general and explains them briefly.</p>
         <div>
-          <h4>Point set</h3>
+          <h4 class="bold_title">Point set</h3>
           <p>A collection of points (in the plane, R²)</p>
         </div>
         <div>
-          <h4>General position</h3>
+          <h4 class="bold_title">General position</h3>
           <p>A set of points is said to be in general position when no three of its points are colinear. Similarly, a set of lines is said to be in general position when no three of its lines itersect in the same point.</p>
         </div>
         <div>
-          <h4>Orientation determinant</h3>
+          <h4 class="bold_title">Orientation determinant</h3>
           <p>Given three points on the plane p1, p2, p3, the orientation determinant expresses where the third point lies with respect to the directed line through p1 and p2. If this determinant is positive, the point p3 lies to the left of p1p2. If it is negative, it lies to the right of p1p2. Finally, if it is equal to zero, p3 lies on p1p2. The value of the determinant is given by the following matrix. <br> ABSTRACT vs REALISABLE</p>
         </div>
         <div>
-          <h4>Order type</h3>
+          <h4 class="bold_title">Order type</h3>
           <p>The order type of a set {p1, p2, ..., pn} of points in general position is a mapping that assigns to each ordered triple i, j, k in {1, ..., n} the orientation (clockwise or counter-clockwise) of the point triple pi, pj, pk.</p>
         </div>
         <div>
-          <h4>Chrirotope</h3>
-          <p>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</p>
+          <h4 class="bold_title">Chrirotope</h3>
+          <p>Chrirotope is an old name for order type coming from chemistry. Indeed, one of the first applications of order types were the study of chiral molecules, molecules that can be expressed in left or right handedness with potentially different chemical effects in each.</p>
         </div>
         <div>
-          <h4>Combinatorial explosion</h3>
+          <h4 class="bold_title">Combinatorial explosion</h3>
           <p>In combinatorics, it is often required to count objects or properties of a system of elements. The expression Combinatorial explosion is used when the number we are trying to count increases fast with respect to the number of elements. Where fast means that it rapidly becomes impossible to enumerate the objects or properties due to their number.</p>
         </div>
         <div>
-          <h4>Order type encoding</h3>
-          <p>An order type encoding is a way to encode or represent an order type. This can be done in various way, each with their advantages and disadvantages.</p>
-          <ul>
-            <li>Point list: Simple store a list of points that represent the order type.</li>
-            <li>Wiring diagram: Encodes the order type by keeping track of how the dual lines of the points intersect.</li>
-            <li>Lambda Matrix: A n*n matrix M (where n is the number of points of the order type) that for each pair of different points of the type pi, pj stores in location M[i,j] the number of points to the left (or right) of the line through pi and pj.</li>
-          </ul>
+          <h4 class="bold_title">Order type encoding</h3>
+          <p>An order type encoding is a way to encode or represent an order type. This can be done in various way, each with their advantages and disadvantages. They needn't be realisable, meaning that the point set described by the encoding won't necessarly be embeddable in the plane.</p>
         </div>
         <div>
-          <h4>Duality</h3>
+          <h4 class="bold_title">Natural ordering</h4>
+          <p>Points are said to be in a natural ordering if they are labelled in such a way as to have the lexicographically smallest lambda-matrix associated with them.</p>
+        </div>
+        <div>
+          <h4 class="bold_title">Duality</h4>
           <p>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</p>
+        </div>
+        <div>
+          <h4 class="bold_title">Pseudo lines</h4>
+          <p>A pseudo line is a simple closed curve.</p>
+          <ul>
+            <li>A curve is an object similar to a line, but that does not have to be straight.</li>
+            <li>A simple curve is a curve that does not cross itself and that has no missing points.</li>
+          </ul>
+          <p>Pseudo lines do not need to be straight, but they preserve topological and Combinatorial properties of lines. In an arangement of pseudo lines, each pair crosses only once.</p>
         </div>
       </div>
     </div>
