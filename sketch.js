@@ -127,7 +127,7 @@ function drawPolygon(canvas, extremes, color) {
   if (extremes.length === 0) return;
   canvas.stroke(color);
   for (let i = 0; i < extremes.length - 1; i++) {
-    canvas.line(extremes[i].x* canvas.width, (1-extremes[i].y) * canvas.height, extremes[i + 1].x * canvas.width, (1-extremes[i + 1]).y * canvas.height);
+    canvas.line(extremes[i].x * canvas.width, (1 - extremes[i].y) * canvas.height, extremes[i + 1].x * canvas.width, (1 - extremes[i + 1]).y * canvas.height);
   }
   canvas.stroke("black");
 }
@@ -172,7 +172,7 @@ function drawCG(canvas) {
   for (let pointSet of canvas.contents.points) {
     canvas.stroke(pointSet[0].color);
     for (let i = 0; i < pointSet.length; i++) {
-      for (let j = i+1; j < pointSet.length; j++) {
+      for (let j = i + 1; j < pointSet.length; j++) {
         let x1 = canvas.width * pointSet[i].x;
         let y1 = canvas.height * (1 - pointSet[i].y);
         let x2 = canvas.width * pointSet[j].x;
@@ -208,7 +208,7 @@ function magnify(points) {
     else if (points[i].y > maxY) maxY = points[i].y;
   }
 
-  let magnificationFactor = Math.min(1/(maxX - minX), 1/(maxY - minY));
+  let magnificationFactor = Math.min(1 / (maxX - minX), 1 / (maxY - minY));
 
   for (let i = 0; i < points.length; i++) {
     points[i].x -= minX;
@@ -247,7 +247,7 @@ class CanvasContents {
   addPoint(point) {
     if (this.points.length === 0) this.points = [[point]];
     else if (this.points[0].length >= 10) return;
-      else this.points[0].push(point);
+    else this.points[0].push(point);
 
     if (this.drawCH) {
       this.ch = [];
@@ -284,7 +284,7 @@ var sketch = function (p) {
     update();
   };
   p.naturalClickPosition = function () {
-    return {x: p.mouseX/p.width, y: 1-p.mouseY/p.height};
+    return { x: p.mouseX / p.width, y: 1 - p.mouseY / p.height };
   }
 };
 
@@ -401,6 +401,10 @@ function clickOnEquivalent() {
   let lambdaMatrixStr = minLambdaMatrixString(points);
   let equivPoints = binSearchOt(points.length, lambdaMatrixStr);
   clickOnTransferPts();
+  for (let point of equivPoints) {
+    point.x /= point.range;
+    point.y /= point.range;
+  }
   canvasA.contents.points.push(equivPoints);
   if (canvasA.contents.drawCH) canvasA.contents.computeCH();
 
@@ -427,7 +431,7 @@ function clickOnPreview() {
   canvasA.redraw();
 }
 
-function afterLoading(){
+function afterLoading() {
   connectButtons();
   getBlobs();
 }
@@ -435,7 +439,7 @@ function afterLoading(){
 function connectButtons() {
   document.getElementById("canvas-holder1").onclick = clickOnCanvasA;
   document.getElementById("canvas-holder2").onclick = clickOnCanvasB;
-  document.getElementById("arrow_button").onclick= clickOnTransferPts;
+  document.getElementById("arrow_button").onclick = clickOnTransferPts;
   document.getElementById("magni").onclick = clickOnMagnify;
   document.getElementById("clr").onclick = clickOnClear;
   document.getElementById("showchA").onclick = toggleCHA;
@@ -452,8 +456,8 @@ function connectButtons() {
 
   for (let i = 0; i < 10; i++) {
     document.getElementById("set" + i).style.display = "none";
-    document.getElementById("chk" + i).onclick = () => {canvasB.redraw()};
-    document.getElementById("del" + i).onclick = () => {clickOnDeleteSubset(i)};
-    document.getElementById("col" + i).oninput = () => {clickOnChangeColor(i)};
+    document.getElementById("chk" + i).onclick = () => { canvasB.redraw() };
+    document.getElementById("del" + i).onclick = () => { clickOnDeleteSubset(i) };
+    document.getElementById("col" + i).oninput = () => { clickOnChangeColor(i) };
   }
 }
