@@ -412,6 +412,7 @@ function clickOnEquivalent() {
   if (canvasA.contents.points[0].length < 3) return;
   let points = canvasA.contents.points[0];
   let lambdaMatrixStr = minLambdaMatrixString(points);
+  console.log(lambdaMatrixStr);
   let res = binSearchOt(points.length, lambdaMatrixStr);
   let equivPoints = res.points;
   clickOnTransferPts();

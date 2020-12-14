@@ -104,7 +104,6 @@ function minLambdaMatrixString(pointSet) {
             }
         }
 
-        console.log(tmpMatrix);
         if (minMatrix === undefined || tmpMatrix.localeCompare(minMatrix) < 0) {
             minMatrix = tmpMatrix;
         }
@@ -237,38 +236,24 @@ function readOtypeDataset(nbPoints) {
  * @param {string} minLambdaMatrixString the lambda matrix flattended into a string (row after row)
  * @returns {Point[]} the point set realisation corresponding to the given lambda matrix contained in the database or undefined if it wasn't found
  */
-function binSearchOt(nbPoints, minLambdaMatrixString) {
+function binSearchOt(nbPoints, inputLambdaMatrix) {
     let arr = readOtypeDataset(nbPoints);
-
-    let entrySize = nbPoints * 2;
-    return _recBinSearchOt(arr, 0, arr.length / entrySize - 1, nbPoints, minLambdaMatrixString);
+    let entrySize = nbPoints * 2; // n points of 2 coordinates
+    let lastEntryIndex = (arr.length / entrySize) - 1;
+    return _recBinSearchOt(arr, 0, lastEntryIndex, nbPoints, inputLambdaMatrix);
 }
 
 /**
  * Recursive helper function for a binary search on order types
- * lo and hi are entry offsets
+ * lo and hi are point set entry offsets
  */
-function _recBinSearchOt(arr, lo, hi, nbPoints, lambdaMatrixStr) {
+function _recBinSearchOt(arr, lo, hi, nbPoints, inputLambdaMatrix) {
     let midPoint = Math.floor((lo + hi) / 2);
     let pointSet = readPointSet(arr, midPoint, nbPoints);
-
-
-    let ch = grahamScan(pointSet);
-    let minMatrix = _lambdaMatrixStr(pointSet, ch[0]);
-    for (let i = 1; i < ch.length; i++) {
-        let tmpMatrix = _lambdaMatrixStr(orderRadially(pointSet, ch[i]));
-        if (tmpMatrix.localeCompare(minMatrix) < 0) {
-            minMatrix = tmpMatrix;
-        }
-    }
-
-    let lmatrix = minMatrix; //TODO
-    //let lmatrix = minLambdaMatrixString(pointSet);
-    console.log("comparing: ", lmatrix, " to ", lambdaMatrixStr);
-    let res = lmatrix.localeCompare(lambdaMatrixStr);
-
-    console.log("binSearch: ", _lambdaMatrixStr(pointSet), "\ne: ", lambdaMatrixStr);
-
+    let midPointMatrix = minLambdaMatrixString(pointSet);
+    let res = midPointMatrix.localeCompare(inputLambdaMatrix);
+    console.log(lo, hi);
+    console.log(midPointMatrix, inputLambdaMatrix, res);
 
     if (lo === hi) {
         if (res === 0) {
@@ -281,15 +266,15 @@ function _recBinSearchOt(arr, lo, hi, nbPoints, lambdaMatrixStr) {
     if (res === 0) {
         return { points: pointSet, index: midPoint };
     } else if (res < 0) {
-        return _recBinSearchOt(arr, midPoint + 1, hi, nbPoints, lambdaMatrixStr);
+        return _recBinSearchOt(arr, midPoint + 1, hi, nbPoints, inputLambdaMatrix);
     } else {
-        return _recBinSearchOt(arr, lo, midPoint - 1, nbPoints, lambdaMatrixStr);
+        return _recBinSearchOt(arr, lo, midPoint, nbPoints, inputLambdaMatrix);
     }
 }
 
 /**
  * //TODO
- * @param {*} arr  
+ * @param {*} arr 
  * @param {*} offset 
  * @param {*} nbPoints 
  */
@@ -302,7 +287,8 @@ function readPointSet(arr, offset, nbPoints) {
         let pointStart = (offset * entrySize) + i * 2;
         let xBig = arr[pointStart];
         let yBig = arr[pointStart + 1];
-        points.push(new Point(swapEndian(xBig, nbBytes), swapEndian(yBig, nbBytes), range)); // BigEndian to LittleEndian
+        //points.push(new Point(swapEndian(xBig, nbBytes), swapEndian(yBig, nbBytes), range)); // BigEndian to LittleEndian
+        points.push(new Point(xBig, yBig, range));
     }
     return points;
 }
