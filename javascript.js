@@ -336,14 +336,14 @@ function _recBinSearchOt(arr, lo, hi, nbPoints, lambdaMatrixStr) {
 
     if (lo === hi) {
         if (res === 0) {
-            return pointSet;
+            return {points: pointSet, index: lo};
         } else {
             return undefined;
         }
     }
 
     if (res === 0) {
-        return pointSet;
+        return {points: pointSet, index: midPoint};
     } else if (res < 0) {
         return _recBinSearchOt(arr, midPoint + 1, hi, nbPoints, lambdaMatrixStr);
     } else {
@@ -360,12 +360,13 @@ function _recBinSearchOt(arr, lo, hi, nbPoints, lambdaMatrixStr) {
 function readPointSet(arr, offset, nbPoints) {
     let points = [];
     let nbBytes = nbPoints < 9 ? 1 : 2;
+    let range = nbPoints < 9 ? 255 : 65535;
     let entrySize = nbPoints * 2;
     for (let i = 0; i < nbPoints; i++) {
         let pointStart = (offset * entrySize) + i * 2;
         let xBig = arr[pointStart];
         let yBig = arr[pointStart + 1];
-        points.push(new Point(swapEndian(xBig, nbBytes), swapEndian(yBig, nbBytes))); // BigEndian to LittleEndian
+        points.push(new Point(swapEndian(xBig, nbBytes), swapEndian(yBig, nbBytes), range)); // BigEndian to LittleEndian
     }
     return points;
 }
