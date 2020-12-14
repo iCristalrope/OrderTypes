@@ -435,6 +435,34 @@ function clickOnPreview() {
   canvasA.redraw();
 }
 
+function changeSearchType(selectedObject){
+  let type = selectedObject.value;
+  switch(type){
+    case "entry_index":
+      document.getElementById("index_search_div").style.display = "block";
+      document.getElementById("property_search_div").style.display = "none";
+      break;
+    case "property":
+      document.getElementById("index_search_div").style.display = "none";
+      document.getElementById("property_search_div").style.display = "block";
+      break;
+  }
+}
+
+function changeSearchProperty(selectedObject){
+  let property = selectedObject.value;
+  switch(property){
+    case "nb_points_CH":
+      document.getElementById("nb_points_CH_div").style.display = "block";
+      document.getElementById("nb_conv_layers_div").style.display = "none";
+      break;
+    case "nb_conv_layers":
+      document.getElementById("nb_points_CH_div").style.display = "none";
+      document.getElementById("nb_conv_layers_div").style.display = "block";
+      break;
+  }
+}
+
 function afterLoading() {
   connectButtons();
   getBlobs();

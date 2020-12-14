@@ -331,3 +331,7 @@ table tr td {
   color: #47433F;
   border-top: 1px solid #FFF;
 }
+
+#search_div{
+  margin-top: 15px;
+}
