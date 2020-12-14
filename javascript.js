@@ -336,14 +336,14 @@ function _recBinSearchOt(arr, lo, hi, nbPoints, lambdaMatrixStr) {
 
     if (lo === hi) {
         if (res === 0) {
-            return pointSet;
+            return {points: pointSet, index: lo};
         } else {
             return undefined;
         }
     }
 
     if (res === 0) {
-        return pointSet;
+        return {points: pointSet, index: midPoint};
     } else if (res < 0) {
         return _recBinSearchOt(arr, midPoint + 1, hi, nbPoints, lambdaMatrixStr);
     } else {

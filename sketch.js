@@ -399,7 +399,8 @@ function clickOnEquivalent() {
   if (canvasA.contents.points[0].length < 3) return;
   let points = canvasA.contents.points[0];
   let lambdaMatrixStr = minLambdaMatrixString(points);
-  let equivPoints = binSearchOt(points.length, lambdaMatrixStr);
+  let res = binSearchOt(points.length, lambdaMatrixStr);
+  let equivPoints = res.points;
   clickOnTransferPts();
   for (let point of equivPoints) {
     point.x /= point.range;
@@ -407,6 +408,9 @@ function clickOnEquivalent() {
   }
   canvasA.contents.points.push(equivPoints);
   if (canvasA.contents.drawCH) canvasA.contents.computeCH();
+
+  document.getElementById("ptnb").value = equivPoints.length.toString();
+  document.getElementById("idx").value = (res.index + 1).toString();
 
   canvasA.redraw();
   canvasB.redraw();
