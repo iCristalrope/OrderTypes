@@ -167,8 +167,9 @@ function drawPoints(canvas, subsetVisibility = false) {
   }
 }
 
-function drawCH(canvas) {
-  for (let ch of canvas.contents.ch) {
+function drawCH(canvas, chs=null) {
+  if (!chs) chs = canvas.contents.ch;
+  for (let ch of chs) {
     canvas.stroke(ch[0].color);
     for (let i = 0; i < ch.length; i++) {
       let x1 = (canvas.width - 2 * canvasMargin) * ch[i].x + canvasMargin;
@@ -196,6 +197,20 @@ function drawCG(canvas) {
   }
 }
 
+function drawCL(canvas) {
+  for (let pointSet of canvas.contents.points) {
+    canvas.stroke(pointSet[0].color);
+    let points = [...pointSet];
+    let chs = [];
+    while (points.length >= 3) {
+      let ch = grahamScan(points);
+      chs.push(ch);
+      points = points.filter(x => !ch.includes(x));
+    }
+    drawCH(canvas, chs);
+  }
+}
+
 function update() {
   drawPoints(canvasA);
   let subsetVisibility = [];
@@ -206,6 +221,7 @@ function update() {
   for (let canvas of [canvasA, canvasB]) {
     if (canvas.contents.drawCH) drawCH(canvas);
     if (canvas.contents.drawCG) drawCG(canvas);
+    if (canvas.contents.drawCL) drawCL(canvas);
   }
 }
 
@@ -238,6 +254,7 @@ class CanvasContents {
     this.ch = [];
     this.drawCG = false;
     this.drawCH = false;
+    this.drawCL = false;
   }
 
   toggleDrawCG() {
@@ -249,6 +266,10 @@ class CanvasContents {
     else if (this.drawCH) this.ch = [];
 
     this.drawCH = !this.drawCH;
+  }
+
+  toggleDrawCL() {
+    this.drawCL = !this.drawCL;
   }
 
   reset() {
@@ -336,6 +357,11 @@ function toggleCGA() {
   canvasA.redraw();
 }
 
+function toggleCLA() {
+  canvasA.contents.toggleDrawCL();
+  canvasA.redraw();
+}
+
 function toggleCHB() {
   canvasB.contents.toogleDrawCH();
   canvasB.redraw();
@@ -343,6 +369,11 @@ function toggleCHB() {
 
 function toggleCGB() {
   canvasB.contents.toggleDrawCG();
+  canvasB.redraw();
+}
+
+function toggleCLB() {
+  canvasB.contents.toggleDrawCL();
   canvasB.redraw();
 }
 
@@ -567,8 +598,10 @@ function connectButtons() {
   document.getElementById("clr").onclick = clickOnClear;
   document.getElementById("showchA").onclick = toggleCHA;
   document.getElementById("showcgA").onclick = toggleCGA;
+  document.getElementById("showclA").onclick = toggleCLA;
   document.getElementById("showchB").onclick = toggleCHB;
   document.getElementById("showcgB").onclick = toggleCGB;
+  document.getElementById("showclB").onclick = toggleCLB;
   document.getElementById("ptnb").onchange = clickOnChnagePtsNb;
   document.getElementById("prev").onclick = clickOnPrev;
   document.getElementById("next").onclick = clickOnNext;
