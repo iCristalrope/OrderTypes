@@ -196,15 +196,7 @@ function drawCG(canvas) {
   }
 }
 
-function drawCanvas(canvas) {
-  canvas.background(50);
-  canvas.noFill();
-}
-
 function update() {
-  drawCanvas(canvasA);
-  drawCanvas(canvasB);
-
   drawPoints(canvasA);
   let subsetVisibility = [];
   for (let i = 0; i < canvasB.contents.points.length; i++) {
@@ -297,9 +289,9 @@ class CanvasContents {
 var sketch = function (p) {
   p.setup = function () {
     p.canvas = p.createCanvas(500, 500);
-    p.background(51);
   };
   p.draw = function () {
+    p.background(51);
     update();
   };
   p.naturalClickPosition = function () {
