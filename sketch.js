@@ -383,14 +383,14 @@ function clickOnChnagePtsNb() {
 
 function clickOnPrev() {
   let idxField = document.getElementById("idx");
-  if (idxField.value > idxField.min) idxField.value--;
+  if (Number(idxField.value) > Number(idxField.min)) idxField.value = (Number(idxField.value) - 1).toString();
 
   clickOnPreview();
 }
 
 function clickOnNext() {
   let idxField = document.getElementById("idx");
-  if (idxField.value < idxField.max) idxField.value++;
+  if (Number(idxField.value) < Number(idxField.max)) idxField.value = (Number(idxField.value) + 1).toString();
 
   clickOnPreview();
 }
@@ -429,7 +429,6 @@ function clickOnPreview() {
     point.x /= point.range;
     point.y /= point.range;
   }
-  console.log(pointSet);
   canvasA.contents.points.push(pointSet);
   if (canvasA.contents.drawCH) canvasA.contents.computeCH();
 
