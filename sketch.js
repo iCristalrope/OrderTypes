@@ -9,6 +9,8 @@ const otypesNb = {
   "10": 14309547
 };
 
+var canvasMargin = 10;
+
 var searchRes = [];
 
 function displayError(msg) {
@@ -158,7 +160,9 @@ function drawPoints(canvas, subsetVisibility = false) {
       for (let point of pointSubset) {
         canvas.noStroke();
         canvas.fill(point.color);
-        canvas.ellipse(point.x * canvas.width, (1 - point.y) * canvas.height, 5);
+        let x = point.x * (canvas.width - 2 * canvasMargin) + canvasMargin;
+        let y = (1 - point.y) * (canvas.height - 2 * canvasMargin) + canvasMargin;
+        canvas.ellipse(x, y, 5);
       }
   }
 }
@@ -167,10 +171,10 @@ function drawCH(canvas) {
   for (let ch of canvas.contents.ch) {
     canvas.stroke(ch[0].color);
     for (let i = 0; i < ch.length; i++) {
-      let x1 = canvas.width * ch[i].x;
-      let y1 = canvas.height * (1 - ch[i].y);
-      let x2 = canvas.width * ch[(i + 1) % ch.length].x;
-      let y2 = canvas.height * (1 - ch[(i + 1) % ch.length].y);
+      let x1 = (canvas.width - 2 * canvasMargin) * ch[i].x + canvasMargin;
+      let y1 = (canvas.height - 2 * canvasMargin) * (1 - ch[i].y) + canvasMargin;
+      let x2 = (canvas.width - 2 * canvasMargin) * ch[(i + 1) % ch.length].x + canvasMargin;
+      let y2 = (canvas.height - 2 * canvasMargin) * (1 - ch[(i + 1) % ch.length].y) + canvasMargin;
       canvas.line(x1, y1, x2, y2);
     }
   }
@@ -181,10 +185,10 @@ function drawCG(canvas) {
     canvas.stroke(pointSet[0].color);
     for (let i = 0; i < pointSet.length; i++) {
       for (let j = i + 1; j < pointSet.length; j++) {
-        let x1 = canvas.width * pointSet[i].x;
-        let y1 = canvas.height * (1 - pointSet[i].y);
-        let x2 = canvas.width * pointSet[j].x;
-        let y2 = canvas.height * (1 - pointSet[j].y);
+        let x1 = (canvas.width - 2 * canvasMargin) * pointSet[i].x + canvasMargin;
+        let y1 = (canvas.height - 2 * canvasMargin) * (1 - pointSet[i].y) + canvasMargin;
+        let x2 = (canvas.width - 2 * canvasMargin) * pointSet[j].x + canvasMargin;
+        let y2 = (canvas.height - 2 * canvasMargin) * (1 - pointSet[j].y) + canvasMargin;
         canvas.line(x1, y1, x2, y2);
       }
     }
