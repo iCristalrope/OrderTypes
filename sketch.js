@@ -493,22 +493,36 @@ function changeSearchProperty(selectedObject) {
 }
 
 function clickOnExtremePointsSearch() {
+  searchRes = [];
   if (!extrem_09_ready) {
     displayError("Files are still downloading, please wait");
     return;
   }
   let nbPoints = Number(document.getElementById("nb_extreme_points_n").value);
   let nbPointsOnCH = Number(document.getElementById("nb_points_CH_count").value);
-  searchRes = searchByChSize(nbPoints, nbPointsOnCH);
+  let res = searchByChSize(nbPoints, nbPointsOnCH);
+  for (let i of res) {
+    searchRes.push([nbPoints, i]);
+  }
   document.getElementById("res_nb_extrem_points_total").innerText = "Found " + searchRes.length + " entries corresponding to the search";
   document.getElementById("res_nb_extrem_points_current").max = Number(searchRes.length);
   document.getElementById("search_result").style.display = "block";
   clickOnSearchGo();
 }
 
-function handleSearchByNbConvLayers() {
+function clickOnSearchByNbConvLayers() {
+  searchRes = [];
   let nbConvLayers = Number(document.getElementById("nb_conv_layers_count").value);
-  //TODO
+  for (let nbPts = 3; nbPts <= 9; nbPts++) {
+    let res = searchByConvexLayers(nbPts, nbConvLayers);
+    for (let i of res) {
+      searchRes.push([nbPts, i]);
+    }
+  }
+  document.getElementById("res_nb_extrem_points_total").innerText = "Found " + searchRes.length + " entries corresponding to the search";
+  document.getElementById("res_nb_extrem_points_current").max = Number(searchRes.length);
+  document.getElementById("search_result").style.display = "block";
+  clickOnSearchGo();
 }
 
 function afterLoading() {
@@ -529,8 +543,8 @@ function clickOnSearchNext() {
 }
 
 function clickOnSearchGo() {
-  document.getElementById("ptnb").value = document.getElementById("nb_extreme_points_n").value;
-  document.getElementById("idx").value = Number(searchRes[Number(document.getElementById("res_nb_extrem_points_current").value) - 1]) + 1;
+  document.getElementById("ptnb").value = Number(searchRes[Number(document.getElementById("res_nb_extrem_points_current").value) - 1][0]);
+  document.getElementById("idx").value = Number(searchRes[Number(document.getElementById("res_nb_extrem_points_current").value) - 1][1]) + 1;
   clickOnPreview();
 }
 
@@ -554,6 +568,7 @@ function connectButtons() {
   document.getElementById("res_nb_extrem_points_prev").onclick = clickOnSearchPrev;
   document.getElementById("res_nb_extrem_points_next").onclick = clickOnSearchNext;
   document.getElementById("res_nb_extrem_points_go").onclick = clickOnSearchGo;
+  document.getElementById("propLayersSearch").onclick = clickOnSearchByNbConvLayers;
 
   document.getElementById("visib").style.display = "none";
 

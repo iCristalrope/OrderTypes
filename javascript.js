@@ -217,13 +217,7 @@ function orientationDet(a, b, c) {
     return b.x * c.y - a.x * c.y + a.x * b.y - b.y * c.x + a.y * c.x - a.y * b.x;
 }
 
-/**
- * Binary search for the point corresponding to the order type of the given lambda matrix 
- * @param {number} nbPoints the size of the order type
- * @param {string} minLambdaMatrixString the lambda matrix flattended into a string (row after row)
- * @returns {Point[]} the point set realisation corresponding to the given lambda matrix contained in the database or undefined if it wasn't found
- */
-function binSearchOt(nbPoints, minLambdaMatrixString) {
+function readOtypeDataset(nbPoints) {
     let arr;
     if (nbPoints === 9) {
         let pts = ("0" + nbPoints).slice(-2);
@@ -232,9 +226,19 @@ function binSearchOt(nbPoints, minLambdaMatrixString) {
         arr = new Uint8Array(ot_data[`otypes0${nbPoints}_b08`]);
     } else {
         console.log("unhandled number of points");
-        return undefined;
+        arr = undefined;
     }
+    return arr;
+}
 
+/**
+ * Binary search for the point corresponding to the order type of the given lambda matrix 
+ * @param {number} nbPoints the size of the order type
+ * @param {string} minLambdaMatrixString the lambda matrix flattended into a string (row after row)
+ * @returns {Point[]} the point set realisation corresponding to the given lambda matrix contained in the database or undefined if it wasn't found
+ */
+function binSearchOt(nbPoints, minLambdaMatrixString) {
+    let arr = readOtypeDataset(nbPoints);
 
     let entrySize = nbPoints * 2;
     return _recBinSearchOt(arr, 0, arr.length / entrySize - 1, nbPoints, minLambdaMatrixString);
@@ -325,8 +329,6 @@ function swapEndian(num, nbBytes) {
  */
 function searchByChSize(n, chSize) {
     let key = "extrem0" + n + "_b08";
-    console.log(key);
-    console.log(ot_data[key]);
     let arr = new Uint8Array(ot_data[key]);
     let res = [];
     try {
@@ -336,7 +338,45 @@ function searchByChSize(n, chSize) {
             }
         }
     } catch (e) {
-        // nothing
+        console.error(e);
+    }
+    return res;
+}
+
+/**
+ * Returns all the idices of the point set entries of size n that have chSize extreme points
+ * @param {Number} n
+ * @param {Number} layers
+ */
+function searchByConvexLayers(n, layers) {
+    let key = "extrem0" + n + "_b08";
+    let arr = new Uint8Array(ot_data[key]);
+    let res = [];
+    try {
+        for (let i in arr) {
+            let supposition;
+            // an exterior convex layer has at least 3 points ->
+            // if the number of points left after excluding the extremities
+            // is <= 3, then at most one other convex layer exists
+            if (n === arr[i]) {
+                supposition = 1;
+            } else if (n - arr[i] <= 3) {
+                supposition = 2;
+            } else {
+                // recursive algo
+                supposition = 0;
+                let points = readPointSet(readOtypeDataset(n), i, n);
+                while (points.length >= 3) {
+                    let ch = grahamScan(points);
+                    points = points.filter(x => !ch.includes(x));
+                    supposition++;
+                }
+                if (points.length > 0) supposition++;
+            }
+            if (supposition === layers) res.push(i);
+        }
+    } catch (e) {
+        console.error(e);
     }
     return res;
 }
