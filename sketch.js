@@ -9,7 +9,7 @@ const otypesNb = {
   "10": 14309547
 };
 
-var extremePointsRes = [];
+var searchRes = [];
 
 function displayError(msg) {
   document.getElementById("errorMsg").innerText = msg;
@@ -448,12 +448,19 @@ function clickOnPreview() {
   canvasA.redraw();
 }
 
+function clearSearchResults() {
+  searchRes = [];
+  document.getElementById("search_result").style.display = "none";
+}
+
 function changeSearchType(selectedObject) {
   let type = selectedObject.value;
   switch (type) {
     case "entry_index":
       document.getElementById("index_search_div").style.display = "block";
       document.getElementById("property_search_div").style.display = "none";
+      // remove the search results for properties
+      clearSearchResults();
       break;
     case "property":
       if (!extrem_09_ready) {
@@ -466,6 +473,7 @@ function changeSearchType(selectedObject) {
 }
 
 function changeSearchProperty(selectedObject) {
+  clearSearchResults();
   let property = selectedObject.value;
   switch (property) {
     case "nb_points_CH":
@@ -475,7 +483,6 @@ function changeSearchProperty(selectedObject) {
     case "nb_conv_layers":
       document.getElementById("nb_points_CH_div").style.display = "none";
       document.getElementById("nb_conv_layers_div").style.display = "block";
-      document.getElementById("res_nb_extrem_points").style.display = "none";
       break;
   }
 }
@@ -487,10 +494,11 @@ function clickOnExtremePointsSearch() {
   }
   let nbPoints = Number(document.getElementById("nb_extreme_points_n").value);
   let nbPointsOnCH = Number(document.getElementById("nb_points_CH_count").value);
-  extremePointsRes = searchByChSize(nbPoints, nbPointsOnCH);
-  document.getElementById("res_nb_extrem_points_total").innerText = "Found " + extremePointsRes.length + " entries corresponding to the search";
-  document.getElementById("res")
-  document.getElementById("res_nb_extrem_points").style.display = "block";
+  searchRes = searchByChSize(nbPoints, nbPointsOnCH);
+  document.getElementById("res_nb_extrem_points_total").innerText = "Found " + searchRes.length + " entries corresponding to the search";
+  document.getElementById("res_nb_extrem_points_current").max = Number(searchRes.length);
+  document.getElementById("search_result").style.display = "block";
+  clickOnSearchGo();
 }
 
 function handleSearchByNbConvLayers() {
@@ -501,6 +509,24 @@ function handleSearchByNbConvLayers() {
 function afterLoading() {
   connectButtons();
   getBlobs();
+}
+
+function clickOnSearchPrev() {
+  let current = document.getElementById("res_nb_extrem_points_current");
+  if (Number(current.value) > Number(current.min)) current.value = (Number(current.value) - 1).toString();
+  clickOnSearchGo();
+}
+
+function clickOnSearchNext() {
+  let current = document.getElementById("res_nb_extrem_points_current");
+  if (Number(current.value) < Number(current.max)) current.value = (Number(current.value) + 1).toString();
+  clickOnSearchGo();
+}
+
+function clickOnSearchGo() {
+  document.getElementById("ptnb").value = document.getElementById("nb_extreme_points_n").value;
+  document.getElementById("idx").value = Number(searchRes[Number(document.getElementById("res_nb_extrem_points_current").value) - 1]) + 1;
+  clickOnPreview();
 }
 
 function connectButtons() {
@@ -520,6 +546,9 @@ function connectButtons() {
   document.getElementById("pvw").onclick = clickOnPreview;
   document.getElementById("propExtremSearch").onclick = clickOnExtremePointsSearch;
   document.getElementById("nb_extreme_points_n").onchange = () => {document.getElementById("nb_points_CH_count").max = Number(document.getElementById("nb_extreme_points_n").value)};
+  document.getElementById("res_nb_extrem_points_prev").onclick = clickOnSearchPrev;
+  document.getElementById("res_nb_extrem_points_next").onclick = clickOnSearchNext;
+  document.getElementById("res_nb_extrem_points_go").onclick = clickOnSearchGo;
 
   document.getElementById("visib").style.display = "none";
 
