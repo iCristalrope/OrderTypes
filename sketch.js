@@ -428,6 +428,7 @@ function clickOnPreview() {
     let pts = ("0" + nb).slice(-2);
     arr = new Uint16Array(ot_data[`otypes${pts}_b16`]);
   }
+
   let pointSet = readPointSet(arr, id, nb);
   for (let point of pointSet){
     point.x /= point.range;
