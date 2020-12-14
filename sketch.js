@@ -196,7 +196,17 @@ function drawCG(canvas) {
   }
 }
 
+function drawCanvas(canvas) {
+  canvas.background(50);
+  canvas.noFill();
+  canvas.stroke(75);
+  canvas.rect(canvasMargin, canvasMargin, canvas.width - 2 * canvasMargin, canvas.height - 2 * canvasMargin);
+}
+
 function update() {
+  drawCanvas(canvasA);
+  drawCanvas(canvasB);
+
   drawPoints(canvasA);
   let subsetVisibility = [];
   for (let i = 0; i < canvasB.contents.points.length; i++) {
@@ -292,11 +302,12 @@ var sketch = function (p) {
     p.background(51);
   };
   p.draw = function () {
-    p.background(51);
     update();
   };
   p.naturalClickPosition = function () {
-    return { x: p.mouseX / p.width, y: 1 - p.mouseY / p.height };
+    let x = (p.mouseX - canvasMargin)/ (p.width - 2 * canvasMargin);
+    let y = 1 - (p.mouseY - canvasMargin)/ (p.height - 2 * canvasMargin);
+    return { x: x, y: y};
   }
 };
 
