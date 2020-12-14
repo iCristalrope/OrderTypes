@@ -199,8 +199,6 @@ function drawCG(canvas) {
 function drawCanvas(canvas) {
   canvas.background(50);
   canvas.noFill();
-  canvas.stroke(75);
-  canvas.rect(canvasMargin, canvasMargin, canvas.width - 2 * canvasMargin, canvas.height - 2 * canvasMargin);
 }
 
 function update() {
