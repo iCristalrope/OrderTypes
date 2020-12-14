@@ -493,16 +493,26 @@ function changeSearchProperty(selectedObject) {
 }
 
 function clickOnExtremePointsSearch() {
-  searchRes = [];
+  clearSearchResults();
   if (!extrem_09_ready) {
     displayError("Files are still downloading, please wait");
     return;
   }
-  let nbPoints = Number(document.getElementById("nb_extreme_points_n").value);
+  let nbPoints = document.getElementById("nb_extreme_points_n").value;
   let nbPointsOnCH = Number(document.getElementById("nb_points_CH_count").value);
-  let res = searchByChSize(nbPoints, nbPointsOnCH);
-  for (let i of res) {
-    searchRes.push([nbPoints, i]);
+  if (nbPoints === "any") {
+    for (let nbPts = nbPointsOnCH; nbPts <= 9; nbPts++) {
+      let res = searchByChSize(nbPts, nbPointsOnCH);
+      for (let i of res) {
+        searchRes.push([nbPts, Number(i)]);
+      }
+    }
+  } else {
+    nbPoints = Number(nbPoints);
+    let res = searchByChSize(nbPoints, nbPointsOnCH);
+    for (let i of res) {
+      searchRes.push([nbPoints, Number(i)]);
+    }
   }
   document.getElementById("res_nb_extrem_points_total").innerText = "Found " + searchRes.length + " entries corresponding to the search";
   document.getElementById("res_nb_extrem_points_current").max = Number(searchRes.length);
@@ -511,12 +521,12 @@ function clickOnExtremePointsSearch() {
 }
 
 function clickOnSearchByNbConvLayers() {
-  searchRes = [];
+  clearSearchResults();
   let nbConvLayers = Number(document.getElementById("nb_conv_layers_count").value);
   for (let nbPts = 3; nbPts <= 9; nbPts++) {
     let res = searchByConvexLayers(nbPts, nbConvLayers);
     for (let i of res) {
-      searchRes.push([nbPts, i]);
+      searchRes.push([nbPts, Number(i)]);
     }
   }
   document.getElementById("res_nb_extrem_points_total").innerText = "Found " + searchRes.length + " entries corresponding to the search";
