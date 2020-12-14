@@ -1,5 +1,6 @@
 var ot_data = {};
 var data_ot9_ready = false;
+var extrem_09_ready = false;
 
 /**
  * Loads a portion of the files to search through of the database
@@ -26,11 +27,33 @@ async function getBlobs() {
     data_ot9_ready = true;
 }
 
+async function getBlobsExtremePoints() {
+    const [extr3, extr4, extr5, extr6, extr7, extr8, extr9] = await Promise.all([
+        fetch('/ot_data/extrem/extrem03.b08'),
+        fetch('/ot_data/extrem/extrem04.b08'),
+        fetch('/ot_data/extrem/extrem05.b08'),
+        fetch('/ot_data/extrem/extrem06.b08'),
+        fetch('/ot_data/extrem/extrem07.b08'),
+        fetch('/ot_data/extrem/extrem08.b08'),
+        fetch('/ot_data/extrem/extrem09.b08')
+    ])
+
+    ot_data["extrem03_b08"] = await extr3.arrayBuffer();
+    ot_data["extrem04_b08"] = await extr4.arrayBuffer();
+    ot_data["extrem05_b08"] = await extr5.arrayBuffer();
+    ot_data["extrem06_b08"] = await extr6.arrayBuffer();
+    ot_data["extrem07_b08"] = await extr7.arrayBuffer();
+    ot_data["extrem08_b08"] = await extr8.arrayBuffer();
+    ot_data["extrem09_b08"] = await extr9.arrayBuffer();
+
+    extrem_09_ready = true;
+}
+
 ////////////////////
 
 class Point {
     constructor() {
-        let x, y, range=255, color = "#888888";
+        let x, y, range = 255, color = "#888888";
         switch (arguments.length) {
             case 1:
                 x = arguments[0].x;
@@ -64,95 +87,6 @@ class Point {
     }
 }
 
-//TODO debug
-function test() {
-    let buff = new Uint8Array(ot_data["otypes05_b08"]);
-
-
-    pointSets = [];
-    let nbSets = 3;
-    let nbPoints = 5;
-    let index = 0;
-    for (let set = 0; set < nbSets; set++) {
-        let points = [];
-        for (let point = 0; point < nbPoints; point++) {
-            let x = buff[index++];
-            let y = buff[index++];
-            points.push(new Point(x, y));
-        }
-        pointSets.push(points);
-    };
-
-    console.log(minLambdaMatrixString(pointSets[0]));
-    console.log(minLambdaMatrixString(pointSets[1]));
-    console.log(minLambdaMatrixString(pointSets[2]));
-
-    console.log(buff);
-    return "end of functioin test";
-
-    console.log(buff[0]);
-    console.log(buff[1]);
-    console.log(buff[2]);
-    console.log(buff[3]);
-    console.log(buff[4]);
-    console.log(buff[5]);
-    console.log(buff[6]);
-    console.log(buff[7]);
-    console.log(buff[8]);
-    console.log(buff[9]);
-    console.log(buff[10]);
-    console.log(buff[11]);
-    console.log(buff[12]);
-    console.log(buff[13]);
-    console.log(buff[14]);
-    console.log(buff[15]);
-    console.log(buff[16]);
-    console.log(buff[17]);
-    console.log(buff[18]);
-    console.log(buff[19]);
-    console.log(buff[20]);
-    console.log(buff[21]);
-    console.log(buff[22]);
-    console.log(buff[23]);
-    console.log(buff[24]);
-    console.log(buff[25]);
-    console.log(buff[26]);
-    console.log(buff[27]);
-    console.log(buff[28]);
-    console.log(buff[29]);
-}
-
-/**
- * Computes the lexicographically smallest lambda matrix of a point set and returns it as a string, row after row.
- * //TODO: if n is large format breaks (more than one digit required per entry)  
- * @param {Point[]} pointSet 
- */
-/*
-function minLambdaMatrixString(pointSet) {
-    let indices = [];
-    for (let i = 0; i < pointSet.length; i++) {
-        indices.push(i);
-    }
-
-    let arr = derefIndices(indices, pointSet);
-    let min_matrix = _lambdaMatrixStr(arr);
-    while (true) {
-        indices = nextPermutation(indices);
-        if (indices === undefined) {
-            break;
-        }
-        arr = derefIndices(indices, pointSet);
-        let matrix = _lambdaMatrixStr(arr);
-
-        if (matrix.localeCompare(min_matrix) === -1) {
-            min_matrix = matrix;
-        }
-    }
-
-    return min_matrix;
-}
-*/
-
 function minLambdaMatrixString(pointSet) {
     let CH = grahamScan(pointSet);
     let minMatrix = undefined;
@@ -163,7 +97,7 @@ function minLambdaMatrixString(pointSet) {
         let pivotPoint = CH[pivotId];
         let ordered = orderRadially(pointSet, pivotPoint);
         let reversed = [ordered[0]].concat(ordered.slice(1).reverse());
-        
+
         for (let i in reversed) {
             for (let j in reversed) {
                 tmpMatrix += nbPointsLeftOf(reversed[i], reversed[j], reversed);
@@ -171,7 +105,7 @@ function minLambdaMatrixString(pointSet) {
         }
 
         console.log(tmpMatrix);
-        if (minMatrix === undefined || tmpMatrix.localeCompare(minMatrix) < 0){
+        if (minMatrix === undefined || tmpMatrix.localeCompare(minMatrix) < 0) {
             minMatrix = tmpMatrix;
         }
     }
@@ -252,8 +186,6 @@ function nextPermutation(arr) {
     return arr;
 }
 
-
-
 /**
  * Computes the number of points different from point1 and point2 in points that are to the left of the line point1-point2
  * @param {Point} point1 first point of the line
@@ -261,7 +193,7 @@ function nextPermutation(arr) {
  * @param {Point[]} points the set complete set of points
  * @param {boolean} left indicated the direction of the turn with the line
  */
-function nbPointsLeftOf(point1, point2, points, left=true) {
+function nbPointsLeftOf(point1, point2, points, left = true) {
     let nbLeft = 0;
     for (let i in points) {
         let point = points[i];
@@ -336,14 +268,14 @@ function _recBinSearchOt(arr, lo, hi, nbPoints, lambdaMatrixStr) {
 
     if (lo === hi) {
         if (res === 0) {
-            return {points: pointSet, index: lo};
+            return { points: pointSet, index: lo };
         } else {
             return undefined;
         }
     }
 
     if (res === 0) {
-        return {points: pointSet, index: midPoint};
+        return { points: pointSet, index: midPoint };
     } else if (res < 0) {
         return _recBinSearchOt(arr, midPoint + 1, hi, nbPoints, lambdaMatrixStr);
     } else {
@@ -384,4 +316,27 @@ function swapEndian(num, nbBytes) {
     } else if (nbBytes === 4) {
         return ((num & 0xFF) << 24) | ((num & 0xFF00) << 8) | ((num >> 8) & 0xFF00) | ((num >> 24) & 0xFF);
     }
+}
+
+/**
+ * Returns all the idices of the point set entries of size n that have chSize extreme points 
+ * @param {Number} n 
+ * @param {Number} chSize 
+ */
+function searchByChSize(n, chSize) {
+    let key = "extrem0" + n + "_b08";
+    console.log(key);
+    console.log(ot_data[key]);
+    let arr = new Uint8Array(ot_data[key]);
+    let res = [];
+    try {
+        for (let i in arr) {
+            if (Number(arr[i]) === chSize) {
+                res.push(i);
+            }
+        }
+    } catch (e) {
+        // nothing
+    }
+    return res;
 }

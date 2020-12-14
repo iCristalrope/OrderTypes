@@ -335,3 +335,7 @@ table tr td {
 #search_div{
   margin-top: 15px;
 }
+
+#errorMsg{
+  color: red;
+}

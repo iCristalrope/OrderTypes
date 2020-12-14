@@ -9,6 +9,14 @@ const otypesNb = {
   "10": 14309547
 };
 
+var extremePointsRes = [];
+
+function displayError(msg) {
+  document.getElementById("errorMsg").innerText = msg;
+  document.getElementById("errorBox").style.visibility = "visible";
+  setTimeout(() => document.getElementById("errorBox").style.visibility = "hidden", 3000);
+}
+
 function range(n) {
   if (n < 9) return 256;
   else return 65536;
@@ -430,7 +438,7 @@ function clickOnPreview() {
   }
 
   let pointSet = readPointSet(arr, id, nb);
-  for (let point of pointSet){
+  for (let point of pointSet) {
     point.x /= point.range;
     point.y /= point.range;
   }
@@ -440,23 +448,26 @@ function clickOnPreview() {
   canvasA.redraw();
 }
 
-function changeSearchType(selectedObject){
+function changeSearchType(selectedObject) {
   let type = selectedObject.value;
-  switch(type){
+  switch (type) {
     case "entry_index":
       document.getElementById("index_search_div").style.display = "block";
       document.getElementById("property_search_div").style.display = "none";
       break;
     case "property":
+      if (!extrem_09_ready) {
+        getBlobsExtremePoints();
+      }
       document.getElementById("index_search_div").style.display = "none";
       document.getElementById("property_search_div").style.display = "block";
       break;
   }
 }
 
-function changeSearchProperty(selectedObject){
+function changeSearchProperty(selectedObject) {
   let property = selectedObject.value;
-  switch(property){
+  switch (property) {
     case "nb_points_CH":
       document.getElementById("nb_points_CH_div").style.display = "block";
       document.getElementById("nb_conv_layers_div").style.display = "none";
@@ -464,8 +475,27 @@ function changeSearchProperty(selectedObject){
     case "nb_conv_layers":
       document.getElementById("nb_points_CH_div").style.display = "none";
       document.getElementById("nb_conv_layers_div").style.display = "block";
+      document.getElementById("res_nb_extrem_points").style.display = "none";
       break;
   }
+}
+
+function clickOnExtremePointsSearch() {
+  if (!extrem_09_ready) {
+    displayError("Files are still downloading, please wait");
+    return;
+  }
+  let nbPoints = Number(document.getElementById("nb_extreme_points_n").value);
+  let nbPointsOnCH = Number(document.getElementById("nb_points_CH_count").value);
+  extremePointsRes = searchByChSize(nbPoints, nbPointsOnCH);
+  document.getElementById("res_nb_extrem_points_total").innerText = "Found " + extremePointsRes.length + " entries corresponding to the search";
+  document.getElementById("res")
+  document.getElementById("res_nb_extrem_points").style.display = "block";
+}
+
+function handleSearchByNbConvLayers() {
+  let nbConvLayers = Number(document.getElementById("nb_conv_layers_count").value);
+  //TODO
 }
 
 function afterLoading() {
@@ -488,6 +518,8 @@ function connectButtons() {
   document.getElementById("next").onclick = clickOnNext;
   document.getElementById("equiv").onclick = clickOnEquivalent;
   document.getElementById("pvw").onclick = clickOnPreview;
+  document.getElementById("propExtremSearch").onclick = clickOnExtremePointsSearch;
+  document.getElementById("nb_extreme_points_n").onchange = () => {document.getElementById("nb_points_CH_count").max = Number(document.getElementById("nb_extreme_points_n").value)};
 
   document.getElementById("visib").style.display = "none";
 

@@ -26,6 +26,9 @@
       </div>
     </div>
     <div id="site_content">
+      <div id="errorBox">
+        <span id="errorMsg"> <!-- fill in with code --> </span>
+      </div>
       <div id="content">
         <div id="canvas_container">
           <div id="canvas-holder1">
@@ -78,17 +81,6 @@
                 </div>
 
                 <div id="property_search_div" style="margin-top: 5px; display: none;">
-                  <label for="idx">Number of points composing the order type: </label>
-                  <select id="ptnb">
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                  </select><br />
                   <label>Search by: </label>
                   <select onChange="changeSearchProperty(this)">
                     <option value="nb_points_CH">Number of points on the convex hull</option>
@@ -96,14 +88,25 @@
                   </select>
 
                   <div id="nb_points_CH_div">
+                    <label>Number of points composing the order type: </label>
+                    <select id="nb_extreme_points_n">
+                      <option value="3" default>3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                      <option value="6">6</option>
+                      <option value="7">7</option>
+                      <option value="8">8</option>
+                      <option value="9">9</option>
+                      <option value="10">10</option>
+                    </select><br />
                     <label>Number of points on the convex hull: </label>
-                    <input id="nb_points_CH_count" type="text"><br>
-                    <button>Search</button>
+                    <input id="nb_points_CH_count" type="number" min="3"><br>
+                    <button id="propExtremSearch">Search</button>
                   </div>
 
                   <div id="nb_conv_layers_div" style="display: none;">
                     <label>Number of convex layers: </label>
-                    <input id="nb_points_CH_count" type="text"><br>
+                    <input id="nb_conv_layers_count" type="number"><br>
                     <button>Search</button>
                   </div>
 
@@ -111,7 +114,14 @@
                   </div>
               </div>
               <div id="search_output">
-                <!--- to be filled in by code -->   
+                <div id="res_nb_extrem_points" style="display: none;">
+                  <h4><b>Result</b></h4>
+                  <span id="res_nb_extrem_points_total">Found _ entries corresponding to the search</span> <br>
+                  <button id="res_nb_extrem_points_prev">Previous</button>
+                  <input id="res_nb_extrem_points_current" type="number" value="1" min="1">
+                  <button id="res_nb_extrem_points_go">Go</button>
+                  <button id="res_nb_extrem_points_next">Next</button>
+                </div>
               </div>
             </div>
           </div>
