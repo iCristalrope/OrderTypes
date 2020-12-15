@@ -11,7 +11,7 @@ const otypesNb = {
 
 var canvasMargin = 10;
 
-var searchRes = [];
+var searchRes = [], leq;
 
 /**
  * Displays an error message for 2 seconds in upper part of the demo page.
@@ -53,8 +53,8 @@ function leqComparatorOrientDet(base) {
  * @returns {*} the leftmost point
  */
 function findLeftmostPoint(points) {
-    lfPoint = points[0];
-    lfX = points[0].x;
+    let lfPoint = points[0];
+    let lfX = points[0].x;
     for (let i = 1; i < points.length; i++)
         if (points[i].x < lfX) {
             lfX = points[i].x;
@@ -103,27 +103,33 @@ function merge(left, right) {
     return merged.concat(left.slice(leftPos)).concat(right.slice(rightPos));
 }
 
-function orderRadially(points, center = null, clockwise = false) {
-  /*
-  Returns the ordered list of point with respect to the leftmost
-  point.
-  */
-  let lfPoint;
-  if (!center) lfPoint = findLeftmostPoint(points);
-  else lfPoint = center;
-  const lfPointIndex = points.indexOf(lfPoint);
+/**
+ * Orders the points radially around a given point.
+ * @param points the points to be ordered radially
+ * @param center the point around which the others should be ordered
+ * if not null, otherwise order around the leftmost point
+ * @returns {*[]} the points ordered radially
+ */
+function orderRadially(points, center = null) {
+    let lfPoint;
+    // if a center is specified order around it otherwise order around
+    // the leftmost point
+    if (!center) lfPoint = findLeftmostPoint(points);
+    else lfPoint = center;
 
-  leq = leqComparatorOrientDet(lfPoint);
-  let toSort = [...points];
-  toSort.splice(lfPointIndex, 1);
+    const lfPointIndex = points.indexOf(lfPoint);
+    leq = leqComparatorOrientDet(lfPoint);
+    let toSort = [...points];
+    toSort.splice(lfPointIndex, 1);
 
-  let ordered = [lfPoint].concat(mergeSort(toSort));
-  if (clockwise){
-    return [ordered[0]].concat(ordered.slice(1).reverse());
-  }
-  return ordered;
+    return [lfPoint].concat(mergeSort(toSort));
 }
 
+/**
+ * Computes the convex hull of a set of points.
+ * @param points of which we need to compute the convex hull
+ * @returns {*[]} the convex hull of a set of points
+ */
 function grahamScan(points) {
     if (points.length <= 3) return [...points];
 
@@ -153,7 +159,7 @@ function grahamScan(points) {
 function randomColor() {
     const letters = "0123456789ABCDEF";
     let color = "#";
-    for (var i = 0; i < 6; i++) {
+    for (let i = 0; i < 6; i++) {
         color += letters[Math.floor(Math.random() * 16)];
     }
     return color;
