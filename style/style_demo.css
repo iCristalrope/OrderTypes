@@ -191,7 +191,7 @@ ul#menu li a:hover, ul#menu li.selected a, ul#menu li.selected a:hover {
 #dispOpts{
   margin-top: 20px; 
   display: grid;
-  grid-template: "a b" 500px;
+  grid-template: "a b" 350px;
   column-gap: 50px;
 }
 
