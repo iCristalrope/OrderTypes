@@ -2,148 +2,40 @@
 <html>
 
 <head>
-  <title>Order Types</title>
-  <meta name="description" content="website description" />
-  <meta name="keywords" content="website keywords, website keywords" />
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-  <link rel="stylesheet" type="text/css" href="/style/style.css" title="style" />
-  <script src="https://code.jquery.com/jquery-3.5.1.min.js"
-    integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <title>Order Types</title>
+    <meta name="description" content="website description" />
+    <meta name="keywords" content="website keywords, website keywords" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href="/style/style.css" title="style" />
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 </head>
 
 <body>
-  <div id="main">
-    <div id="header">
-      <div id="menubar">
-        <ul id="menu">
-          <!-- put class="selected" in the li tag for the selected page - to highlight which page you're on -->
-          <li class="selected"><a href="/index.html">Tutorial</a></li>
-          <li><a href="/glossary.html">Glossary</a></li>
-          <li><a href="/demo.html">Interactive Demo</a></li>
-        </ul>
-      </div>
+    <div id="main">
+        <div id="header">
+            <div id="menubar">
+                <ul id="menu">
+                    <li class="selected"><a href="/index.html">Home</a></li>
+                    <li><a href="/tutorial.html">Tutorial</a></li>
+                    <li><a href="/glossary.html">Glossary</a></li>
+                    <li><a href="/demo.html">Interactive Demo</a></li>
+                    <li><a href="/implementation.html">Implementation details</a></li>
+                </ul>
+            </div>
+        </div>
+        <div id="site_content">
+            <div id="content" style="height: 100%;">
+                <h1 class="bold_title">Welcome to this website about Order Types of point sets</h1>
+                <p>Here, you will find several resources to help you learn about Order Types.</p>
+                <p>You can follow a step-by-step tutorial, giving you an intuition for what they are and what they can
+                    be used for. If, during the reading, some word or concept is unclear, you can always search through
+                    the glossary. <br> For a more hands-on and visual approach the interactive demo will allow you to
+                    play around and compare the properties of point sets and their order type. The demo also allows for
+                    the search of the exhaustive database of Order Types compiled by [Aichholtzer et al. (2001)].
+                    Finally, the last page goes through the implementation details of some key algorithms making the
+                    demo possible.</p>
+            </div>
+        </div>
     </div>
-    <div id="site_content">
-      <div id="content">
-        <!-- insert the page content here -->
-        <h1 class="bold_title">Welcome to this website explaining Order Types of point sets</h1>
-        <h2 class="bold_title">Introduction</h2>
-        <p>Here you will find ressources to understand what order types are and how we can munipulate them to learn
-          about point sets. Besides a
-          tutorial, the website also provides a glossary of terms directly related to order types or that are more
-          general in Computational Geometry as well as an interactive demo.</p>
-        <p>The data used to compare user inputs with or to look up a property comes from the exhaustive database of
-          Order Types of upto 11 points along with some properties about them provided by O. Aichholzer, F. Aurenhammer,
-          and H. Krasser. The database can be found <a href="http://www.ist.tugraz.at/staff/aichholzer/research/rp/triangulations/ordertypes/">here</a>.</p>
-        <p>Please visit the different pages of the website to explore what it has to offer.</p>
-
-
-
-        <h2 class="bold_title">Tutorial - What is an order type</h2>
-        <p>In this section we want to explain in an intuitive way what order types are and how we can manipulate them as
-          well as some of their applications.</p>
-        <p>We will start by giving you the full definition and then we'll brake it down and understand it piece by
-          piece.
-        </p>
-        <blockquote>The order type of a set {p1, p2, ..., pn} of points in general position is a mapping that assigns to
-          each ordered triple i, j, k in {1, ..., n} the orientation (clockwise or counter-clockwise) of the point
-          triple pi, pj, pk.</blockquote>
-        <p>Ok, as expected, this is still a bit obscure, but it will all make sense soon!</p>
-        <p>Let's start with the easy part: the point set. This really is what it sounds like; a collection of points.
-          Consider, for example, the following point set S of 6 points in the plane.</p>
-        <iframe src="https://www.desmos.com/calculator/jzmluyc6lb?embed" width="400px" height="400px" style="border: 1px solid #ccc;" frameborder=0></iframe>
-
-        <p>The following concept is that of general position. This is a property that can apply to points or to lines.
-        <ul>
-          <li>For points it means that no three points in the given set can be colinear (on the same line).</li>
-          <li>Two lines that are not parallel will inevitable intersect. General position for lines simply means that no
-            three lines can intersect in the same point.</li>
-        </ul>
-        </p>
-
-        <p>The following construction shows a set of points that is NOT in general position. Adding p7 to S broke the
-          property as it is now possible to draw a line through p3, p7 and p2.</p>
-        <iframe src="https://www.desmos.com/calculator/hlrbx7zhzw?embed" width="400px" height="400px"
-          style="border: 1px solid #ccc" frameborder=0></iframe>
-
-        <br><br>
-        <p>Now, let's skip ahead a bit and talk about the orientation of a triple of points.</p>
-        <p>The orientation of an ordered triple of points expresses how the third point is positioned relative to the
-          first two. Three points p1, p2, p3 can only be in three different orientations: clockwise, counter-clockwise
-          or alligned. The following figure shows the three options.</p>
-        <iframe src="https://www.desmos.com/calculator/9g1octzxb1?embed" width="400px" height="400px"
-          style="border: 1px solid #ccc" frameborder=0></iframe>
-        <ul>
-          <li>In red: p3 lies on the left of p1p2 and p1,p2,p3 form a left turn (counter-clockwise rotation)</li>
-          <li>In purle: p3 is on p1p2 and p1, p2, p3 form a straight line (alligned)</li>
-          <li>In blue: p3 lies on the right of p1p2 and p1, p2, p3 form a right turn (clockwise rotation)</li>
-        </ul>
-        <p>The orientation of three points can be computed by the following matrix called Orientation Determinant. When
-          the value of the determinant d is d&lt;0, d=0, d&gt;0 the three points form a counter-clockwise, no, clockwise
-          rotation.</p>
-        <img src="images/tutorial/odmatrix.png">
-
-        <br><br>
-        <p>Good, now we're ready to tackle the main part of the definition. </p>
-        <p>The somewhat compicated formulation boils down to this: For each triple of points in the set keep their
-          orientation.</p>
-        <p>A more intuitive definition is a question: "In what way are the points of this set arranged relative to each
-          other?". For example, all sets of four points fall into two order types. One point set is drawn below for
-          each.</p>
-        <iframe src="https://www.desmos.com/calculator/dyjtki6wua?embed" width="400px" height="400px" style="border: 1px solid #ccc" frameborder=0></iframe>
-        <iframe src="https://www.desmos.com/calculator/cnncscg1ov?embed" width="400px" height="400px" style="border: 1px solid #ccc" frameborder=0></iframe>
-        <p>For size four, either the points are in the arangement "triangle containing a point" or "no triangle contains another
-          point". <br> For size five, the possible arrangements are a pentagon, a quadrilateral containing a point or a triangle containing two points. All point sets of size four or five fall into these categories, either directly or by symmetry.</p>
-
-        <p>This information can be used to compare different sets of points. Two sets with the same order type for
-          example will have the same number of triangulations.</p>
-
-
-
-        <h1 class="bold_title">Tutorial - Order Type Encoding</h1>
-        <p>Now that we understand what an order type is we need to know how to work with them. But, how do we compute
-          the order type of a point set to learn about its properties and compare them to that of another set. We need a
-          way to encode Order Types.</p>
-        <p>As the number of Order Types increases exponentially with the size of the set of points, effiency is
-          required.</p>
-        <p>Multiple encodings exist:</p>
-        <ul>
-          <li>
-            <p>Triple orientation list: A litteral approach would be to store for each triple of points their
-              orientation. Triples are given lexicographical order (p1, p2, p3) , (p1, p2, p4), ... This is very space-inefficient.</p>
-            <p> LEFT <br> LEFT <br> RIGHT <br> ... <br> </p>
-          </li>
-          <li>
-            <p>Point list: Instead of storing the orientation of triples, we could store the points themselves and
-            recompute the triples when necessary. This is more compact but query times will suffer greatly</p>
-            <p>0, 158 <br> 56, 301 <br> 0, 254 <br> 15, 70 <br> ...</p>
-          </li>
-          <li>Wiring diagram: </li>
-          <li>
-            <p>Lambda Matrix: This is a matrix of size n * n (where n is the number of points) where each (i,j) position holds the number of points on the left of the directed line through points i and j.</p> 
-            <img src="images/tutorial/lambda_matrix.png">
-            <p>This clever solution allows for a quadratic cost storage in the number of points and can be
-            compared directly with other matrices.</p>
-          </li>
-          <p><b>Important note:</b> For encodings where the encoding varies depending on the labeling of the points, like for triple orientation or lambda matrix encoding, the points are assumed to be in natural ordering. This means that the lexicographically smallest resulting encoding is chosen to represent the order type.</p>
-        </ul>
-        <br>
-
-
-
-        <h1 class="bold_title">Interactive demo - Order Types database by Aichholtzer et al.</h1>
-        <p>The exhaustive database of order types of upto 11 points and their properties is a collection of files. Each file describes order types or one of their properties of a particular size. The database has index files that are used to identify files corresponding to a specific order type.</p>
-        <p>These files range from "otypes03.b08" to "otypes10.b16". They contain one point list per order type. These order types are sorted by natural ordering. The number before the dot represents the number of points of the order type and the file extension the number of bits used to save each coordinate of a point.</p>
-        <p>Since the order types are sorted by natural ordering in the index files, binary search can be used to find the entry corresponding to a point set by comparing its lambda matrix to the lambda matrix of the point set at the currently evaluated entry. After this finding an entry containing a specific property of this order type can be done in constant time since it is located at the same entry offset as its order type in the corresponding file.</p>
-
-
-
-        <h1 class="bold_title">Interactive demo - Computing a lambda matrix of a point set</h1>
-        <p>The lambda matrix used to describe an order type is always the smallest lexicographical matrix computed on any of the labelings of the the points in the set. As the number of arangements of n points (used to determine the labeling) grows with the factorial of n, it is important to have an efficient algorithm to compute the smallest matrix as exhaustive search quickly becomes infeasible.</p>
-        <p>J. E. Goodman and R. Pollack describe one such algorithm in [Multidimensional sorting, 1983]</p>
-      </div>
-    </div>
-  </div>
 </body>
-
-</html>

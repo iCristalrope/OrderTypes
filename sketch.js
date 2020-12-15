@@ -40,7 +40,7 @@ function leqComparatorOrientDet(base) {
   ordered around the base point.
   */
   return (b, c) =>
-    (b.x - base.x) * (c.y - b.y) - (b.y - base.y) * (c.x - b.x) > 0;
+    (b.x - base.x) * (c.y - b.y) - (b.y - base.y) * (c.x - b.x) >= 0;
 }
 
 function findLeftmostPoint(points) {
@@ -279,7 +279,7 @@ class CanvasContents {
 
   addPoint(point) {
     if (this.points.length === 0) this.points = [[point]];
-    else if (this.points[0].length >= 10) return;
+    else if (this.points[0].length >= 9) return;
     else this.points[0].push(point);
 
     if (this.drawCH) {
