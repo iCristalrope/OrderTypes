@@ -53,13 +53,14 @@
                 </figcaption>
             </fig>
             <br>
-            The idea is the consider each point on the convex hull in turn as a pivot for a clockwise radial sort in
-            order to determine a labelling of the points. For each of these labellings, the &lambda;-matrix is
-            computed. A &lambda;-matrix M is an n*n matrix (where n is the size of the point set) with each entry
-            M(i, j) containing the number of points that lie on the left of the ordered line through point i and
-            point j. In the end, only the matrix with smallest lexicographical value is kept as the natural
-            &lambda;-matrix.
-
+            <p>
+                The idea is the consider each point on the convex hull in turn as a pivot for a clockwise radial sort in
+                order to determine a labelling of the points. For each of these labellings, the &lambda;-matrix is
+                computed. A &lambda;-matrix M is an n*n matrix (where n is the size of the point set) with each entry
+                M(i, j) containing the number of points that lie on the left of the ordered line through point i and
+                point j. In the end, only the matrix with smallest lexicographical value is kept as the natural
+                &lambda;-matrix.
+            </p>
             <pre class="prettyprint lang-js" style="margin-top: 10px;">
 function minLambdaMatrixString(pointSet) {
     let convexHull = grahamScan(pointSet);
@@ -84,18 +85,40 @@ function minLambdaMatrixString(pointSet) {
 
     return minMatrix;
 }</pre>
-
-            <br>
+            <p>
+                We will now perform a quick analysis of the complexity of the algorithm presented here-above:
+                <ul>
+                    <li>
+                        The complexity of computing the convex hull of n points is the complexity of the Graham Scan
+                        algorithm, hence <i>O(n log(n))</i>.
+                    </li>
+                    <li>
+                        Sorting the points radially around another uses the classical merge sort algorithm, hence it has a
+                        complexity of <i>O(n log(n))</i>.
+                    </li>
+                    <li>
+                        Computing the &lambda;-matrix, once the points' order is set, has a complexity which is cubic in
+                        number of points. This is because for each ordered pair of points we need to iterate over all the
+                        other points and verify in which half-plane they are. Overall, computing this step takes
+                        <i>O(n³)</i>.
+                    </li>
+                    <li>
+                        Because the sorting step is dominated by the computation of the &lambda;-matrix, the total complexity
+                        of the algorithm is <i>O(k n³)</i>, where k is the number of points on the convex hull.
+                    </li>
+                </ul>
+            </p>
             <h2>Binary Search equivalent point set</h2>
-            The order types database is exhaustive for the considered number of points, hence a guarantee is
-            provided that all the possible sets of points drawn by the user, containing between 3 and 9 points, have
-            a corresponding sets of points in the dataset. The entries of this dataset are ordered lexicographically
-            based on their natural &lambda; - matrix, making it possible to search the database using a simple and
-            efficient binary search algortihm. In such a binary search algorithm, the half of the elements to be
-            searched is determined by comparing the natural &lambda; matrix of the middle element with the one of
-            drawn points and the algorithm is called recursively on the newly determined half or it stops if the
-            middle set of points is the desired one.
-
+            <p>
+                The order types database is exhaustive for the considered number of points, hence a guarantee is
+                provided that all the possible sets of points drawn by the user, containing between 3 and 9 points, have
+                a corresponding sets of points in the dataset. The entries of this dataset are ordered lexicographically
+                based on their natural &lambda; - matrix, making it possible to search the database using a simple and
+                efficient binary search algortihm. In such a binary search algorithm, the half of the elements to be
+                searched is determined by comparing the natural &lambda; matrix of the middle element with the one of
+                drawn points and the algorithm is called recursively on the newly determined half or it stops if the
+                middle set of points is the desired one.
+            </p>
             <pre class="prettyprint lang-js" style="margin-top: 10px;">
 function binSearchOt(nbPoints, inputLambdaMatrix) {
     let arr = readOtypeDataset(nbPoints);

@@ -119,12 +119,12 @@
           </li>
           <li>Wiring diagram: </li>
           <li>
-            <p>Lambda Matrix: This is a matrix of size n * n (where n is the number of points) where each (i,j) position holds the number of points on the left of the directed line through points i and j.</p> 
+            <p>&lambda;-matrix: This is a matrix of size n * n (where n is the number of points) where each (i,j) position holds the number of points on the left of the directed line through points i and j.</p>
             <img src="images/tutorial/lambda_matrix.png">
             <p>This clever solution allows for a quadratic cost storage in the number of points and can be
             compared directly with other matrices.</p>
           </li>
-          <p><b>Important note:</b> For encodings where the encoding varies depending on the labeling of the points, like for triple orientation or lambda matrix encoding, the points are assumed to be in natural ordering. This means that the lexicographically smallest resulting encoding is chosen to represent the order type.</p>
+          <p><b>Important note:</b> For encodings where the encoding varies depending on the labeling of the points, like for triple orientation or &lambda;-matrix encoding, the points are assumed to be in natural ordering. This means that the lexicographically smallest resulting encoding is chosen to represent the order type.</p>
         </ul>
         <br>
 
@@ -133,12 +133,12 @@
         <h1 class="bold_title">Interactive demo - Order Types database by Aichholtzer et al.</h1>
         <p>The exhaustive database of order types of upto 11 points and their properties is a collection of files. Each file describes order types or one of their properties of a particular size. The database has index files that are used to identify files corresponding to a specific order type.</p>
         <p>These files range from "otypes03.b08" to "otypes10.b16". They contain one point list per order type. These order types are sorted by natural ordering. The number before the dot represents the number of points of the order type and the file extension the number of bits used to save each coordinate of a point.</p>
-        <p>Since the order types are sorted by natural ordering in the index files, binary search can be used to find the entry corresponding to a point set by comparing its lambda matrix to the lambda matrix of the point set at the currently evaluated entry. After this finding an entry containing a specific property of this order type can be done in constant time since it is located at the same entry offset as its order type in the corresponding file.</p>
+        <p>Since the order types are sorted by natural ordering in the index files, binary search can be used to find the entry corresponding to a point set by comparing its &lambda;-matrix to the &lambda;-matrix of the point set at the currently evaluated entry. After this finding an entry containing a specific property of this order type can be done in constant time since it is located at the same entry offset as its order type in the corresponding file.</p>
 
 
 
-        <h1 class="bold_title">Interactive demo - Computing a lambda matrix of a point set</h1>
-        <p>The lambda matrix used to describe an order type is always the smallest lexicographical matrix computed on any of the labelings of the the points in the set. As the number of arangements of n points (used to determine the labeling) grows with the factorial of n, it is important to have an efficient algorithm to compute the smallest matrix as exhaustive search quickly becomes infeasible.</p>
+        <h1 class="bold_title">Interactive demo - Computing a &lambda;-matrix of a point set</h1>
+        <p>The &lambda;-matrix used to describe an order type is always the smallest lexicographical matrix computed on any of the labelings of the the points in the set. As the number of arangements of n points (used to determine the labeling) grows with the factorial of n, it is important to have an efficient algorithm to compute the smallest matrix as exhaustive search quickly becomes infeasible.</p>
         <p>J. E. Goodman and R. Pollack describe one such algorithm in [Multidimensional sorting, 1983]</p>
       </div>
     </div>
