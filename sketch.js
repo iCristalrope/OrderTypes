@@ -88,7 +88,7 @@ function merge(left, right) {
   return merged.concat(left.slice(leftPos)).concat(right.slice(rightPos));
 }
 
-function orderRadially(points, center = null) {
+function orderRadially(points, center = null, clockwise = false) {
   /*
   Returns the ordered list of point with respect to the leftmost
   point.
@@ -102,9 +102,11 @@ function orderRadially(points, center = null) {
   let toSort = [...points];
   toSort.splice(lfPointIndex, 1);
 
-  let orderedPoints = [lfPoint].concat(mergeSort(toSort));
-  //orderedPoints.push(lfPoint); //TODO
-  return orderedPoints;
+  let ordered = [lfPoint].concat(mergeSort(toSort));
+  if (clockwise){
+    return [ordered[0]].concat(ordered.slice(1).reverse());
+  }
+  return ordered;
 }
 
 function grahamScan(points) {

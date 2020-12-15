@@ -109,12 +109,11 @@ function minLambdaMatrixString(pointSet) {
     for (let pivotId in CH) {
         let tmpMatrix = "";
         let pivotPoint = CH[pivotId];
-        let ordered = orderRadially(pointSet, pivotPoint);
-        let reversed = [ordered[0]].concat(ordered.slice(1).reverse());
+        let ordered = orderRadially(pointSet, pivotPoint, true);
 
-        for (let i in reversed) {
-            for (let j in reversed) {
-                tmpMatrix += nbPointsLeftOf(reversed[i], reversed[j], reversed);
+        for (let i in ordered) {
+            for (let j in ordered) {
+                tmpMatrix += nbPointsLeftOf(ordered[i], ordered[j], ordered);
             }
         }
 
