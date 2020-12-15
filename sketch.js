@@ -223,6 +223,7 @@ function update() {
     if (canvas.contents.drawCG) drawCG(canvas);
     if (canvas.contents.drawCL) drawCL(canvas);
   }
+  showLM();
 }
 
 function magnify(points) {
@@ -590,6 +591,31 @@ function clickOnSearchGo() {
   clickOnPreview();
 }
 
+function showLM() {
+  if (document.getElementById("showlm").checked && canvasA.contents.points.length !== 0) {
+    let lmatField = document.getElementById("lmatrix");
+    lmatField.style.display = "block";
+    let lmatVal = minLambdaMatrixString(canvasA.contents.points[0]);
+    console.log(lmatVal);
+    let lmatHTML = "<table class='matrix'>\n";
+    let nbPts = canvasA.contents.points[0].length;
+    for (let i = 0; i < nbPts; i++) {
+      lmatHTML += "<tr>\n";
+      for (let j = 0; j < nbPts; j++) {
+        let val;
+        if (i === j) val = "&omega;";
+        else val = lmatVal[i * nbPts + j];
+        lmatHTML += "<td>" + val + "</td>\n";
+      }
+      lmatHTML += "</tr>\n";
+    }
+    lmatHTML += "</table>\n";
+    lmatField.innerHTML = lmatHTML;
+  } else {
+    document.getElementById("lmatrix").style.display = "none";
+  }
+}
+
 function connectButtons() {
   document.getElementById("canvas-holder1").onclick = clickOnCanvasA;
   document.getElementById("canvas-holder2").onclick = clickOnCanvasB;
@@ -599,6 +625,7 @@ function connectButtons() {
   document.getElementById("showchA").onclick = toggleCHA;
   document.getElementById("showcgA").onclick = toggleCGA;
   document.getElementById("showclA").onclick = toggleCLA;
+  document.getElementById("showlm").onclick = showLM;
   document.getElementById("showchB").onclick = toggleCHB;
   document.getElementById("showcgB").onclick = toggleCGB;
   document.getElementById("showclB").onclick = toggleCLB;
