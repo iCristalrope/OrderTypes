@@ -87,27 +87,28 @@ function minLambdaMatrixString(pointSet) {
 }</pre>
             <p>
                 We will now perform a quick analysis of the complexity of the algorithm presented here-above:
-                <ul>
-                    <li>
-                        The complexity of computing the convex hull of n points is the complexity of the Graham Scan
-                        algorithm, hence <i>O(n log(n))</i>.
-                    </li>
-                    <li>
-                        Sorting the points radially around another uses the classical merge sort algorithm, hence it has a
-                        complexity of <i>O(n log(n))</i>.
-                    </li>
-                    <li>
-                        Computing the &lambda;-matrix, once the points' order is set, has a complexity which is cubic in
-                        number of points. This is because for each ordered pair of points we need to iterate over all the
-                        other points and verify in which half-plane they are. Overall, computing this step takes
-                        <i>O(n³)</i>.
-                    </li>
-                    <li>
-                        Because the sorting step is dominated by the computation of the &lambda;-matrix, the total complexity
-                        of the algorithm is <i>O(k n³)</i>, where k is the number of points on the convex hull.
-                    </li>
-                </ul>
             </p>
+            <ul>
+                <li>
+                    The complexity of computing the convex hull of n points is the complexity of the Graham Scan
+                    algorithm, hence <i>O(n log(n))</i>.
+                </li>
+                <li>
+                    Sorting the points radially around another uses the classical merge sort algorithm, hence it has a
+                    complexity of <i>O(n log(n))</i>.
+                </li>
+                <li>
+                    Computing the &lambda;-matrix, once the points' order is set, has a complexity which is cubic in
+                    number of points. This is because for each ordered pair of points we need to iterate over all the
+                    other points and verify in which half-plane they are. Overall, computing this step takes
+                    <i>O(n³)</i>.
+                </li>
+                <li>
+                    Because the sorting step is dominated by the computation of the &lambda;-matrix, the total
+                    complexity
+                    of the algorithm is <i>O(k n³)</i>, where k is the number of points on the convex hull.
+                </li>
+            </ul>
             <h2>Binary Search equivalent point set</h2>
             <p>
                 The order types database is exhaustive for the considered number of points, hence a guarantee is
