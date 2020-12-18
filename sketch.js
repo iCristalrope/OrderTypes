@@ -48,6 +48,17 @@ function leqComparatorOrientDet(base) {
 }
 
 /**
+ * Returns a function which can act like a position-based comparison
+ * operator for the merge sort.
+ * @param base the point around which the others should be ordered
+ * @returns {function(*, *): boolean}
+ */
+function geqComparatorOrientDet(base) {
+    return (b, c) =>
+        (b.x - base.x) * (c.y - b.y) - (b.y - base.y) * (c.x - b.x) <= 0;
+}
+
+/**
  * Finds the leftmost point of the set (has the minimal x coordinate)
  * @param points a set points
  * @returns {*} the leftmost point
@@ -110,7 +121,7 @@ function merge(left, right) {
  * if not null, otherwise order around the leftmost point
  * @returns {*[]} the points ordered radially
  */
-function orderRadially(points, center = null) {
+function orderRadially(points, center = null, reversed = false) {
     let lfPoint;
     // if a center is specified order around it otherwise order around
     // the leftmost point
@@ -118,7 +129,8 @@ function orderRadially(points, center = null) {
     else lfPoint = center;
 
     const lfPointIndex = points.indexOf(lfPoint);
-    leq = leqComparatorOrientDet(lfPoint);
+    if (reversed) leq = geqComparatorOrientDet(lfPoint);
+    else leq = leqComparatorOrientDet(lfPoint);
     let toSort = [...points];
     toSort.splice(lfPointIndex, 1);
 
@@ -142,7 +154,7 @@ function grahamScan(points) {
                 extremePoints[extremePoints.length - 2],
                 extremePoints[extremePoints.length - 1],
                 orderedPoints[i]
-            ) <= 0
+            ) < 0
             ) {
             extremePoints.pop();
         }
@@ -537,7 +549,6 @@ function clickOnEquivalent() {
     if (canvasA.contents.points[0].length < 3) return;
     let points = canvasA.contents.points[0];
     let lambdaMatrixStr = minLambdaMatrixString(points);
-    console.log(lambdaMatrixStr);
     let res = binSearchOt(points.length, lambdaMatrixStr);
     let equivPoints = res.points;
     clickOnTransferPts();

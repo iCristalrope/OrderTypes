@@ -107,16 +107,10 @@ function minLambdaMatrixString(pointSet) {
 
     // try each point on CH as pivot
     for (let pivotId in CH) {
-        let tmpMatrix = "";
         let pivotPoint = CH[pivotId];
-        let ordered = orderRadially(pointSet, pivotPoint);
-        let reversed = [ordered[0]].concat(ordered.slice(1).reverse());
+        let reversed = orderRadially(pointSet, pivotPoint, true);
 
-        for (let i in reversed) {
-            for (let j in reversed) {
-                tmpMatrix += nbPointsLeftOf(reversed[i], reversed[j], reversed);
-            }
-        }
+        let tmpMatrix = lambdaMatrixString(reversed);
 
         if (minMatrix === undefined || tmpMatrix.localeCompare(minMatrix) < 0) {
             minMatrix = tmpMatrix;
@@ -124,6 +118,24 @@ function minLambdaMatrixString(pointSet) {
     }
 
     return minMatrix;
+}
+
+/**
+ * Computes the lambda matrix of the given set of points. The points
+ * are considered in their order in the set.
+ * @param points is the set of points
+ * @returns {string} the lambda natrix in form of a string
+ */
+function lambdaMatrixString(points) {
+    let tmpMatrix = "";
+
+    for (let i in points) {
+        for (let j in points) {
+            tmpMatrix += nbPointsLeftOf(points[i], points[j], points);
+        }
+    }
+
+    return tmpMatrix;
 }
 
 /**
@@ -138,12 +150,15 @@ function nbPointsLeftOf(point1, point2, points, left = true) {
     for (let i in points) {
         let point = points[i];
         if (!point.equals(point1) && !point.equals(point2)) {
-            if (orientationDet(point1, point2, point) > 0) {
+            if (orientationDet(point1, point2, point) >= 0) {
                 if (left) {
                     nbLeft++;
                 }
-            } else if (!left) {
-                nbLeft++;
+            }
+            if (orientationDet(point1, point2, point) <= 0) {
+                if (!left) {
+                    nbLeft++;
+                }
             }
         }
     }
@@ -200,14 +215,15 @@ function binSearchOt(nbPoints, inputLambdaMatrix) {
 function _recBinSearchOt(arr, lo, hi, nbPoints, inputLambdaMatrix) {
     let midPoint = Math.floor((lo + hi) / 2);
     let pointSet = readPointSet(arr, midPoint, nbPoints);
-    let midPointMatrix = minLambdaMatrixString(pointSet);
+    let midPointMatrix = lambdaMatrixString(pointSet); // the points are already in the order minimising lambda matrix
     let res = midPointMatrix.localeCompare(inputLambdaMatrix);
 
     if (lo === hi) {
         if (res === 0) {
             return { points: pointSet, index: lo };
         } else {
-            return undefined;
+            console.log("Error: no points set found");
+            return { points: [], index: lo };
         }
     }
 
@@ -218,6 +234,26 @@ function _recBinSearchOt(arr, lo, hi, nbPoints, inputLambdaMatrix) {
     } else {
         return _recBinSearchOt(arr, lo, midPoint, nbPoints, inputLambdaMatrix);
     }
+}
+
+/**
+ * Regular and inefficient search function.
+ * @param arr array of coordinates of points of point sets
+ * @param nbPoints the size of the order type
+ * @param inputLambdaMatrix the flattened lambda matrix that we look for
+ * @returns {Point[]} returns the point set realisation from the database with the same natural lambda matrix or undefined it no match was found
+ */
+function regularSearch(arr, nbPoints, inputLambdaMatrix) {
+    console.log("Regular search");
+    for (let id = 0; id < otypesNb[nbPoints.toString()]; id++) {
+        let pointSet = readPointSet(arr, id, nbPoints);
+        let midPointMatrix = lambdaMatrixString(pointSet);
+        let res = midPointMatrix.localeCompare(inputLambdaMatrix);
+        if (res === 0) {
+            return { points: pointSet, index: id };
+        }
+    }
+    return undefined;
 }
 
 /**
