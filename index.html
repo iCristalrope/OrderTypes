@@ -50,7 +50,14 @@
             <h2>Shortcomings and possible improvements</h2>
             <p>
                 The major shortcoming of the demo is an error in the search of an equivalent point set to the set drawn
-                by the user, which in certain cases fails.
+                by the user, which in certain cases fails. This error is caused by fact that the logic computing the
+                &lambda;-matrix is built under the assumption of general position. In certain cases, three points drawn
+                by the user might be co-liniar. In this situation the ordering of the points giving the minimum &lambda;-matrix
+                needs to be computed in a different way, otherwise its columns might be permuted, leading to a
+                non-minimal value. A temporary fix to avoid the situation where the search for an equivalent order type
+                does not return the desired result would be to make sure the drawing does not contain any triplets of
+                co-liniar points. This can be easily done by analysing the complete graph of the drawing using the
+                provided option to show the complete graph.
             </p>
             <p>
                 The web version of the demo only handles a maximum of 9 points due to large file sizes for 10 points and
@@ -61,7 +68,8 @@
                 Credits
             </h2>
             <p>
-                This project was realised for the course INFO-F420 - Computational Geometry - 2020-2021, given by prof. S.
+                This project was realised for the course INFO-F420 - Computational Geometry - 2020-2021, given by prof.
+                S.
                 Langerman, by Olivier De Cannière and Mădălin Ionescu.
             </p>
             <h2>
