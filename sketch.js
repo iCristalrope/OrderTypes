@@ -728,6 +728,7 @@ function clickOnSearchNext() {
  * Displays a certain search result demanded by the user.
  */
 function clickOnSearchGo() {
+    if (searchRes.length === 0) return;
     document.getElementById("ptnb").value = Number(searchRes[Number(document.getElementById("res_nb_extrem_points_current").value) - 1][0]);
     document.getElementById("idx").value = Number(searchRes[Number(document.getElementById("res_nb_extrem_points_current").value) - 1][1]) + 1;
     clickOnPreview();
